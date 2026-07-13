@@ -1,0 +1,103 @@
+{
+  "common": {
+    "appName": "FERWAFA Approbations",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "cancel": "Annuler",
+    "loading": "Chargement…",
+    "save": "Enregistrer",
+    "search": "Rechercher des demandes…",
+    "dashboardNav": "Tableau de bord",
+    "myRequestsNav": "Mes demandes",
+    "newRequestNav": "Nouvelle demande",
+    "approvalQueueNav": "File d'approbation",
+    "manageUsersNav": "Gestion des utilisateurs",
+    "auditTrailNav": "Journal d'audit",
+    "notifications": "Notifications",
+    "back": "Retour",
+    "confirm": "Confirmer",
+    "or": "ou"
+  },
+
+  "landing": {
+    "heroTitlePart1": "Mémos et bons de commande,",
+    "heroTitleAccent": "approuvés sans papier",
+    "heroSubtitle": "Le flux de travail interne utilisé par les Finances de la FERWAFA pour faire passer les demandes du comptable au DAF puis au Secrétaire Général — suivies, notifiées et auditées de bout en bout.",
+    "haveInvitation": "J'ai une invitation",
+    "feature1Title": "Approbations par étapes",
+    "feature1Desc": "Les demandes passent du Comptable au DAF puis au SG dans un ordre strict — aucune étape n'est sautée, aucune demande n'est perdue.",
+    "feature2Title": "Suivies à chaque étape",
+    "feature2Desc": "Chaque approbation ou rejet notifie immédiatement l'auteur de la demande.",
+    "feature3Title": "Système fermé par conception",
+    "feature3Desc": "L'accès se fait uniquement sur invitation, vérifié, et protégé par l'authentification à deux facteurs."
+},
+
+"errors": {
+  "unauthorizedTitle": "Accès restreint",
+  "unauthorizedDesc": "Votre rôle ne vous permet pas d'accéder à cette page. Si vous pensez qu'il s'agit d'une erreur, contactez votre Secrétaire Général.",
+  "notFoundDesc": "Cette page n'existe pas, ou vous n'avez pas un favori qui vaille la peine d'être gardé.",
+  "takeMeHome": "Retour à l'accueil"
+},
+
+  "auth": {
+    "welcomeBack": "Content de vous revoir",
+    "signInSubtitle": "Connectez-vous à FERWAFA Approbations",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "createAccountTitle": "Entrez votre invitation",
+    "createAccountSubtitle": "Utilisez l'adresse e-mail et le code envoyés par votre Secrétaire Général",
+    "invitationCode": "Code d'invitation",
+    "verifyCode": "Vérifier le code",
+    "signUpWithGoogle": "S'inscrire avec Google",
+    "signUpWithEmail": "S'inscrire avec e-mail et mot de passe",
+    "checkYourInbox": "Vérifiez votre boîte de réception",
+    "resendEmail": "Renvoyer l'e-mail de vérification",
+    "twoFactorTitle": "Sécurisez votre compte",
+    "twoFactorSubtitle": "Scannez ce code avec Google Authenticator, puis entrez le code à 6 chiffres pour terminer",
+    "confirmAndContinue": "Confirmer et continuer",
+    "enterYourCode": "Entrez votre code"
+  },
+  "dashboard": {
+    "welcomeBack": "Content de vous revoir, {{name}}",
+    "newRequest": "Nouvelle demande",
+    "recentRequests": "Demandes récentes",
+    "reviewQueue": "File d'approbation",
+    "manageUsers": "Gérer les utilisateurs",
+    "noRequestsYet": "Vous n'avez encore soumis aucune demande.",
+    "createFirstRequest": "Créer votre première demande"
+  },
+  "requests": {
+    "title": "Titre",
+    "description": "Description",
+    "requestType": "Type de demande",
+    "amount": "Montant",
+    "currency": "Devise",
+    "submitForApproval": "Soumettre pour approbation",
+    "statusPending": "En attente",
+    "statusApproved": "Approuvée",
+    "statusRejected": "Rejetée",
+    "stageSubmitted": "Soumise",
+    "stageDaf": "Examen DAF",
+    "stageSg": "Examen SG",
+    "stageComplete": "Terminée"
+  },
+  "approvals": {
+    "yourDecision": "Votre décision",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "rejectionReason": "Motif du rejet",
+    "commentOptional": "Commentaire (facultatif)",
+    "confirmApproval": "Confirmer l'approbation",
+    "confirmRejection": "Confirmer le rejet",
+    "noRequestsPending": "Aucune demande n'attend votre examen pour le moment."
+  },
+  "admin": {
+    "userManagement": "Gestion des utilisateurs",
+    "inviteUser": "Inviter un nouvel utilisateur",
+    "disableUser": "Désactiver l'utilisateur",
+    "enableUser": "Réactiver l'utilisateur",
+    "resetTwoFactor": "Réinitialiser la 2FA",
+    "auditTrail": "Journal d'audit"
+  }
+}

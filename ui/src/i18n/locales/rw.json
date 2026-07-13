@@ -1,0 +1,82 @@
+{
+  "common": {
+    "appName": "Sisitemu ya FERWAFA yo Kwemeza Ubusabe bwikoreshwa ry'imari buva Mw'icugamutungo",
+    "signIn": "Injira",
+    "signOut": "Sohoka",
+    "cancel": "Hagarika",
+    "loading": "Biratunganywa…",
+    "save": "Bika",
+    "search": "Shakisha",
+    "dashboardNav": "Imbonerahamwe",
+    "myRequestsNav": "Ubusabe Nohereje",
+    "newRequestNav": "Icyifuzo gishya",
+    "approvalQueueNav": "Urutonde rw'ibyemezwa",
+    "manageUsersNav": "Gucunga abakoresha",
+    "auditTrailNav": "Urutonde rw'ibikorwa",
+    "notifications": "Ubutumwa",
+    "back": "Subira inyuma",
+    "confirm": "Emeza",
+    "or": "cyangwa"
+  },
+  "auth": {
+    "welcomeBack": "Murakaza neza",
+    "signInSubtitle": "Injira muri sisitemu ya FERWAFA",
+    "email": "Imeyili",
+    "password": "Ijambo ry'ibanga",
+    "forgotPassword": "Wibagiwe ijambo ry'ibanga?",
+    "createAccountTitle": "Injiza koodi yo gutumira",
+    "createAccountSubtitle": "Koresha imeyili na koodi wahawe na Umunyamabanga Mukuru",
+    "invitationCode": "Koodi yo gutumira",
+    "verifyCode": "Emeza koodi",
+    "signUpWithGoogle": "Iyandikishe ukoresheje Google",
+    "signUpWithEmail": "Iyandikishe ukoresheje imeyili n'ijambo ry'ibanga",
+    "checkYourInbox": "Reba imeyili yawe",
+    "resendEmail": "Ohereza ubutumwa bwo kwemeza indi mbere",
+    "twoFactorTitle": "Kingira konti yawe",
+    "twoFactorSubtitle": "Koresha Google Authenticator usome koodi, hanyuma wandike umubare w'ibendera 6 kugira ngo urangize",
+    "confirmAndContinue": "Emeza kandi ukomeze",
+    "enterYourCode": "Injiza koodi yawe"
+  },
+  "dashboard": {
+    "welcomeBack": "Murakaza neza, {{name}}",
+    "newRequest": "Icyifuzo gishya",
+    "recentRequests": "Ibyifuzo bishya",
+    "reviewQueue": "Urutonde rw'ibyemezwa",
+    "manageUsers": "Gucunga abakoresha",
+    "noRequestsYet": "Nturaboneka ikibazo cyawe.",
+    "createFirstRequest": "Kora icyifuzo cya mbere"
+  },
+  "requests": {
+    "title": "Umutwe",
+    "description": "Ibisobanuro",
+    "requestType": "Ubwoko bw'icyifuzo",
+    "amount": "Umubare",
+    "currency": "Ifaranga",
+    "submitForApproval": "Ohereza kugira ngo cyemezwe",
+    "statusPending": "Bitegerejwe",
+    "statusApproved": "Byemejwe",
+    "statusRejected": "Byanzwe",
+    "stageSubmitted": "Byoherejwe",
+    "stageDaf": "Isuzuma rya DAF",
+    "stageSg": "Isuzuma rya SG",
+    "stageComplete": "Byarangiye"
+  },
+  "approvals": {
+    "yourDecision": "Icyemezo cyawe",
+    "approve": "Emeza",
+    "reject": "Anga",
+    "rejectionReason": "Impamvu yo kwanga",
+    "commentOptional": "Icyo wongeraho (si ngombwa)",
+    "confirmApproval": "Emeza ko byemejwe",
+    "confirmRejection": "Emeza ko byanzwe",
+    "noRequestsPending": "Nta kibazo gitegereje isuzuma ryawe kuri ubu."
+  },
+  "admin": {
+    "userManagement": "Gucunga abakoresha",
+    "inviteUser": "Tumira umukoresha mushya",
+    "disableUser": "Hagarika umukoresha",
+    "enableUser": "Ongera wemereze umukoresha",
+    "resetTwoFactor": "Subiramo 2FA",
+    "auditTrail": "Urutonde rw'ibikorwa"
+  }
+}

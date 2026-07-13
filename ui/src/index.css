@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-bg-dark: #0B0E14;
+  --color-bg-light: #FFFFFF;
+  --color-surface-light: #F7F8FA;
+  --color-surface-dark: #12151B;
+
+  --color-glass-dark: rgba(255, 255, 255, 0.04);
+  --color-glass-light: rgba(255, 255, 255, 0.9);
+  --color-glass-border-dark: rgba(255, 255, 255, 0.08);
+  --color-glass-border-light: #E5E8EC;
+
+  --color-blue: #0F6FA8;
+  --color-blue-soft: #0F6FA814;
+  --color-gold: #C89A2C;
+  --color-gold-soft: #C89A2C14;
+  --color-green: #1A7A4C;
+  --color-green-soft: #1A7A4C14;
+  --color-danger: #C1454C;
+  --color-danger-soft: #C1454C14;
+
+  /* Renamed — avoids the "text-text-*" collision that was breaking rendering */
+  --color-ink: #12151B;
+  --color-ink-muted: #5B6472;
+  --color-ink-dark: #EDEFF3;
+  --color-ink-muted-dark: #8A93A6;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius-glass: 0.875rem;
+}
+
+@layer base {
+  html { font-family: var(--font-body); }
+
+  body {
+    @apply bg-bg-light text-ink dark:bg-bg-dark dark:text-ink-dark;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  /* ...rest of @layer base stays exactly as before... */
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+
+  code, .font-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Corporate card: hairline border + soft shadow, blur reserved for overlays only */
+  .glass-panel {
+    @apply bg-glass-light dark:bg-glass-dark border border-glass-border-light dark:border-glass-border-dark rounded-[var(--radius-glass)] shadow-[0_1px_2px_rgba(18,21,27,0.04),0_8px_24px_rgba(18,21,27,0.04)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.3)];
+  }
+
+  /* Reserved for true overlays: modals, drawers */
+  .glass-overlay {
+    @apply backdrop-blur-xl bg-glass-light dark:bg-glass-dark border border-glass-border-light dark:border-glass-border-dark;
+  }
+
+  .mesh-bg {
+    @apply bg-bg-light dark:bg-bg-dark;
+  }
+}

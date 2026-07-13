@@ -1,0 +1,76 @@
+import { NavLink } from "react-router-dom";
+import { LayoutDashboard, FilePlus2, ListChecks, FileStack, Users, ShieldCheck, ClipboardList, User, Settings } from "lucide-react";
+import { useAuthStore } from "../../store/authStore";
+import logo from "../../assets/logos/ferwafa-logo.png";
+
+const NAV_BY_ROLE = {
+  staff: [
+    { to: "/staff", label: "Dashboard", icon: LayoutDashboard, end: true },
+    { to: "/staff/new-request", label: "New Request", icon: FilePlus2 },
+    { to: "/staff/my-requests", label: "My Requests", icon: ListChecks },
+    { to: "/staff/templates", label: "Templates", icon: FileStack },
+  ],
+  daf: [
+    { to: "/daf", label: "Dashboard", icon: LayoutDashboard, end: true },
+    { to: "/daf/approvals", label: "Approval Queue", icon: ClipboardList },
+  ],
+  sg: [
+    { to: "/sg", label: "Dashboard", icon: LayoutDashboard, end: true },
+    { to: "/sg/approvals", label: "Approval Queue", icon: ClipboardList },
+    { to: "/sg/admin", label: "User Management", icon: Users },
+    { to: "/sg/audit-trail", label: "Audit Trail", icon: ShieldCheck },
+  ],
+};
+
+const ACCOUNT_NAV = [
+  { to: "/profile", label: "Profile", icon: User },
+  { to: "/settings", label: "Settings", icon: Settings },
+];
+
+export default function Sidebar() {
+  const role = useAuthStore((s) => s.user?.role);
+  const links = NAV_BY_ROLE[role] || [];
+
+  const renderLink = ({ to, label, icon: Icon, end }) => (
+    <NavLink
+      key={to}
+      to={to}
+      end={end}
+      className={({ isActive }) => `
+        flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors shrink-0
+        ${isActive ? "bg-blue text-white" : "text-ink-muted dark:text-ink-muted-dark hover:bg-surface-light dark:hover:bg-glass-dark"}
+      `}
+    >
+      <Icon className="w-4 h-4" />
+      {label}
+    </NavLink>
+  );
+
+  return (
+    <aside className="hidden lg:flex flex-col w-64 shrink-0 h-screen sticky top-0 p-4">
+      <div className="glass-panel flex-1 flex flex-col p-4 min-h-0">
+        {/* Fixed header — never scrolls */}
+        <div className="flex items-center gap-2.5 px-2 mb-6 pb-4 border-b border-glass-border-light dark:border-glass-border-dark shrink-0">
+          <img src={logo} alt="FERWAFA" className="w-9 h-9 object-contain" />
+          <div className="leading-tight">
+            <p className="font-display font-semibold text-sm text-ink dark:text-ink-dark">FERWAFA</p>
+            <p className="text-[11px] text-ink-muted dark:text-ink-muted-dark">Finance Approvals</p>
+          </div>
+        </div>
+
+        {/* Scrollable nav area — independent from body/topbar scroll */}
+        <div className="flex-1 min-h-0 overflow-y-auto pr-1 -mr-1">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark px-3 mb-2">
+            General
+          </p>
+          <nav className="flex flex-col gap-1 mb-6">{links.map(renderLink)}</nav>
+
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark px-3 mb-2">
+            Profile Settings
+          </p>
+          <nav className="flex flex-col gap-1">{ACCOUNT_NAV.map(renderLink)}</nav>
+        </div>
+      </div>
+    </aside>
+  );
+}
