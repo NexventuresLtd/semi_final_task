@@ -1,82 +1,95 @@
-import { motion } from "framer-motion";
-import { ShieldCheck, Workflow, Bell } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, ShieldCheck, CheckCircle2 } from "lucide-react";
 import logo from "../../assets/logos/ferwafa-logo.png";
+import officePhoto from "../../assets/logos/ferwafa-office.jpg";
 
-const POINTS = [
-  { icon: Workflow, text: "Department Request → DAF → SG, in strict order" },
-  { icon: Bell, text: "Every approval or rejection notifies the Department Initiator instantly" },
-  { icon: ShieldCheck, text: "Access is invitation-only and protected by two-factor login" },
-];
+export default function AuthLayout({ children, taglines, workflowPoints, securityLine }) {
+  const [taglineIndex, setTaglineIndex] = useState(0);
 
-export default function AuthLayout({ children }) {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTaglineIndex((i) => (i + 1) % taglines.length);
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [taglines.length]);
+
   return (
-    <div className="min-h-screen flex bg-bg-light">
-      {/* Brand panel — hidden on mobile, shown from lg up */}
-      <div className="hidden lg:flex lg:w-[42%] relative bg-ink overflow-hidden">
-        <img
-          src={logo}
-          alt=""
-          aria-hidden="true"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] opacity-[0.06]"
-        />
-        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
-          <div className="flex items-center gap-2.5">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-ink p-4 sm:p-8">
+      <motion.img
+        src={officePhoto}
+        alt="FERWAFA head office, Kigali"
+        initial={{ scale: 1 }}
+        animate={{ scale: 1.08 }}
+        transition={{ duration: 30, ease: "linear" }}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-ink/95 via-ink/85 to-ink/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
+
+      <div className="hidden lg:flex absolute bottom-8 left-8 items-center gap-2 text-white/60 text-xs z-10">
+        <MapPin className="w-3.5 h-3.5" />
+        Kigali, Rwanda · FIFA Member Association
+      </div>
+
+      <div className="hidden lg:flex flex-col absolute top-10 left-10 z-10 max-w-md">
+        <div className="flex items-center gap-2.5 mb-8">
+          <img src={logo} alt="FERWAFA" className="w-9 h-9 object-contain" />
+          <span className="font-display font-semibold text-sm text-white tracking-tight">
+            FERWAFA · Departments
+          </span>
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={taglineIndex}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.5 }}
+            className="font-display text-[2rem] font-semibold text-white leading-[1.2] tracking-tight"
+          >
+            {taglines[taglineIndex]}
+          </motion.p>
+        </AnimatePresence>
+
+        <div className="flex items-center gap-2 mt-8 text-white/50 text-xs">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          {securityLine}
+        </div>
+
+        <div className="flex flex-col gap-4 mt-10 pt-8 border-t border-white/10">
+          {workflowPoints.map((point, i) => (
+            <motion.div
+              key={point}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 + i * 0.1, duration: 0.4 }}
+              className="flex items-start gap-2.5"
+            >
+              <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
+              <p className="text-[13px] text-white/70 leading-[1.7]">{point}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative z-10 w-full max-w-[420px] lg:ml-auto lg:mr-[6vw]"
+      >
+        <div className="rounded-2xl bg-gray backdrop-blur-9xl border border-white/40 shadow-[0_24px_60px_rgba(0,0,0,0.35)] p-8 sm:p-9">
+          <div className="lg:hidden flex items-center gap-2.5 mb-8">
             <img src={logo} alt="FERWAFA" className="w-8 h-8 object-contain" />
             <span className="font-display font-semibold text-sm text-white tracking-tight">
               FERWAFA · Departments
             </span>
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="font-display text-3xl font-semibold text-white leading-tight max-w-xs mb-8">
-              Memos and purchase orders, without the paper trail.
-            </h2>
-            <div className="flex flex-col gap-4">
-              {POINTS.map(({ icon: Icon, text }, i) => (
-                <motion.div
-                  key={text}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.15 + i * 0.1 }}
-                  className="flex items-start gap-3"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-white/8 flex items-center justify-center shrink-0 mt-0.5">
-                    <Icon className="w-4 h-4 text-white/90" />
-                  </div>
-                  <p className="text-sm text-white/70 leading-relaxed pt-1.5">{text}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <p className="text-xs text-white/40">
-            © {new Date().getFullYear()} Rwanda Football Federation — Ferwafa Departments
-          </p>
-        </div>
-      </div>
-
-      {/* Form panel */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full max-w-[400px]"
-        >
-          {/* Mobile-only brand mark */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-10">
-            <img src={logo} alt="FERWAFA" className="w-8 h-8 object-contain" />
-            <span className="font-display font-semibold text-sm text-ink tracking-tight">
-              FERWAFA · Finance
-            </span>
-          </div>
           {children}
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

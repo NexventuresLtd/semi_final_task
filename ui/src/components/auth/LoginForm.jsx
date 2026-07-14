@@ -38,8 +38,8 @@ export default function LoginForm() {
   return (
     <>
       <center><img src={image} alt="" className="w-20 h-20"/></center>
-      <h1 className="font-display text-2xl font-semibold text-ink mb-1.5">Welcome back</h1>
-      <p className="text-sm text-ink-muted mb-8">Sign in to FERWAFA Approvals</p>
+      <h1 className="font-display text-2xl font-semibold text-white mb-1.5">Welcome back</h1>
+      <p className="text-sm text-white muted mb-8">Sign in to FERWAFA Approvals</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
@@ -70,7 +70,7 @@ export default function LoginForm() {
         </Button>
       </form>
 
-      <p className="text-sm text-ink-muted text-center mt-8">
+      <p className="text-sm text-white text-center mt-8">
         New to FERWAFA?{" "}
         <Link to="/create-account" className="text-blue font-medium hover:underline">
           Use your invitation

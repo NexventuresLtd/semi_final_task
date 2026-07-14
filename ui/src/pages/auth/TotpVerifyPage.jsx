@@ -1,5 +1,6 @@
 // ui/src/pages/auth/TotpVerifyPage.jsx
 import TotpVerifyForm from "../../components/auth/TotpVerifyForm";
+import AuthLayout from "../../components/layout/AuthLayout";
 
 export default function TotpVerifyPage() {
   return (

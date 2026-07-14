@@ -5,7 +5,17 @@ import AuthLayout from "../../components/layout/AuthLayout";
 export default function TotpSetupPage() {
   return (
     <div className="mesh-bg min-h-screen flex items-center justify-center p-4">
-      <AuthLayout><TotpEnrollment /></AuthLayout>
+      <AuthLayout
+        taglines={["Keeping your account secure."]}
+        workflowPoints={[
+          "Two-factor authentication protects every login",
+          "Only you can approve or submit on your behalf",
+        ]}
+        securityLine="Invitation-only · Two-factor protected"
+      >
+        <TotpEnrollment />
+        
+      </AuthLayout>
     </div>
   );
 }

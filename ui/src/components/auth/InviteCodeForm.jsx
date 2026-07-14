@@ -36,9 +36,9 @@ export default function InviteCodeForm() {
   return (
     <>
       <center><img src={image} alt="" className="w-20 h-20"/></center>
-      <h1 className="font-display text-2xl font-semibold text-ink mb-1.5">Enter your invitation</h1>
-      <p className="text-sm text-ink-muted mb-8">
-        Use the email address and code your Secretary General sent you.
+      <h1 className="font-display text-2xl font-semibold text-white mb-1.5">Enter your invitation</h1>
+      <p className="text-sm text-white muted mb-8">
+        Use the email address and code you Received
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -73,7 +73,7 @@ export default function InviteCodeForm() {
           Verify code <ArrowRight className="w-4 h-4" />
         </Button>
 
-        <p className="text-sm text-ink-muted text-center mt-8">
+        <p className="text-sm text-ink-dark text-center mt-8">
         Back to Login{" "}
         <Link to="/login" className="text-blue font-medium hover:underline">
           Sign In
