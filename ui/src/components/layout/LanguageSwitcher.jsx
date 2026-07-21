@@ -1,18 +1,21 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Globe, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { FlagUS, FlagFR, FlagRW } from "../ui/FlagIcons";
 
 const LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "rw", label: "Kinyarwanda" },
+  { code: "en", label: "English", Flag: FlagUS },
+  { code: "fr", label: "Français", Flag: FlagFR },
+  { code: "rw", label: "Kinyarwanda", Flag: FlagRW },
 ];
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ className = "" }) {
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+
+  const current = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0];
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -29,14 +32,14 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="relative" ref={ref}>
+    <div className={`relative ${className}`} ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label="Change language"
-        className="glass-panel flex items-center cursor-pointer gap-2 px-3 py-2 rounded-full text-sm font-medium"
+        className="glass-panel flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium cursor-pointer"
       >
-        <Globe className="w-4 h-4 text-emerald" />
-        <span className="uppercase">{i18n.language}</span>
+        <current.Flag className="w-4 h-4 rounded-[2px] shrink-0" />
+        <span className="uppercase">{current.code}</span>
       </button>
 
       <AnimatePresence>
@@ -46,18 +49,17 @@ export default function LanguageSwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="glass-panel absolute right-0 mt-2 w-44 py-1.5 z-50"
+            className="glass-panel absolute right-0 mt-2 w-48 py-1.5 z-50"
           >
             {LANGUAGES.map((lang) => (
               <li key={lang.code}>
                 <button
                   onClick={() => changeLang(lang.code)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg hover:bg-emerald-soft transition-colors"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg hover:bg-blue-soft transition-colors cursor-pointer"
                 >
-                  {lang.label}
-                  {i18n.language === lang.code && (
-                    <Check className="w-4 h-4 text-emerald" />
-                  )}
+                  <lang.Flag className="w-4 h-4 rounded-[2px] shrink-0" />
+                  <span className="flex-1 text-left">{lang.label}</span>
+                  {i18n.language === lang.code && <Check className="w-4 h-4 text-blue" />}
                 </button>
               </li>
             ))}

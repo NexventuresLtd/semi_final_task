@@ -13,7 +13,7 @@ export default function SignupPage() {
         ]}
         securityLine="Verified invitation · Secure signup"
       >
-        
+        <SignupMethodChoice />
       </AuthLayout>
   );
-}
+}

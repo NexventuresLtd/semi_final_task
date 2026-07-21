@@ -7,9 +7,14 @@ import { useAuthStore } from "../store/authStore";
  * every request regardless. Never trust this layer alone.
  */
 export default function RoleRoute({ allowed = [] }) {
-  const role = useAuthStore((s) => s.user?.role);
+  const { user, isLoading } = useAuthStore();
 
-  if (!allowed.includes(role)) {
+  // Wait for fetchSession to finish before making a role decision.
+  // Without this guard, user is null during the async session restore and
+  // RoleRoute would immediately redirect to /unauthorized on every hard reload.
+  if (isLoading) return null;
+
+  if (!allowed.includes(user?.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

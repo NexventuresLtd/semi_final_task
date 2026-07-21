@@ -4,8 +4,8 @@ import { useAuthStore } from "../store/authStore";
 export default function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuthStore();
 
-  // if (isLoading) return null; // or a full-screen glass loading skeleton
-  // if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (isLoading) return null; // or a full-screen glass loading skeleton
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   return <Outlet />;
 }

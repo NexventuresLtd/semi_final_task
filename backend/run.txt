@@ -1,0 +1,3 @@
+docker run -d --name ferwafa-redis -p 6379:6379 redis:alpine
+
+celery -A app.tasks.celery_app.celery_app worker --loglevel=info -P solo

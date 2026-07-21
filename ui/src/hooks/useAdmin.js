@@ -17,7 +17,7 @@ export function useGenerateInvite() {
       toast.success("Invitation sent");
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
     },
-    onError: (err) => toast.error(err.response?.data?.message || "Could not send invite"),
+    onError: (err) => toast.error(err.response?.data?.message || err.response?.data?.detail || "Could not send invite"),
   });
 }
 

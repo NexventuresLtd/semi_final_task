@@ -50,8 +50,8 @@ export default function ForgotPasswordForm() {
   return (
     <>
       <center><img src={image} alt="" className="w-20 h-20"/></center>
-      <h1 className="font-display text-2xl font-semibold text-ink mb-1.5">Reset your password</h1>
-      <p className="text-sm text-ink-muted mb-8">Enter your email and we'll send you a reset link.</p>
+      <h1 className="font-display text-2xl font-semibold text-white mb-1.5">Reset your password</h1>
+      <p className="text-sm text-white muted mb-8">Enter your email and we'll send you a reset link.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField label="Email address" icon={Mail} type="email" error={errors.email?.message} registration={register("email")} />

@@ -34,10 +34,10 @@ export default function SgDashboard() {
         </div>
         <div className="flex gap-2">
           <Link to="/sg/approvals">
-            <Button variant="ghost" className="gap-1.5"><ClipboardList className="w-4 h-4" /> Review queue</Button>
+            <Button variant="ghost" className="gap-1.5 cursor-pointer"><ClipboardList className="w-4 h-4" /> Review queue</Button>
           </Link>
           <Link to="/sg/admin">
-            <Button className="gap-1.5"><Users className="w-4 h-4" /> Manage users</Button>
+            <Button className="gap-1.5 cursor-pointer"><Users className="w-4 h-4 " /> Manage users</Button>
           </Link>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function SgDashboard() {
             </p>
           </div>
           <Link to="/sg/audit-trail">
-            <Button variant="ghost" className="w-full">View full trail</Button>
+            <Button variant="ghost" className="w-full cursor-pointer">View full trail</Button>
           </Link>
         </GlassCard>
       </div>

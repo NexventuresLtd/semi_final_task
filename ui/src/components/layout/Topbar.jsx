@@ -6,6 +6,8 @@ import ThemeToggle from "../ui/ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Avatar from "../ui/Avatar";
 import { useAuthStore } from "../../store/authStore";
+import { useTranslation } from "react-i18next";
+import GlobalSearch from "./GlobalSearch";
 
 export default function Topbar() {
   const user = useAuthStore((s) => s.user);
@@ -13,6 +15,7 @@ export default function Topbar() {
   const [unreadCount] = useState(3);
   const [menuOpen, setMenuOpen] = useState(false);
   const ref = useRef(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -25,8 +28,7 @@ export default function Topbar() {
   return (
     <header className="glass-panel flex items-center justify-between px-4 py-3 mb-6 sticky top-4 z-40">
       <button className="hidden sm:flex items-center gap-2 text-sm text-ink-muted dark:text-ink-muted-dark">
-        <Search className="w-4 h-4" />
-        <span>Search requests… <kbd className="font-mono text-xs opacity-60">⌘K</kbd></span>
+          <GlobalSearch />        
       </button>
 
       <div className="flex items-center gap-3 ml-auto">
@@ -65,14 +67,14 @@ export default function Topbar() {
                 className="glass-panel absolute right-0 mt-2 w-48 py-1.5 z-50"
               >
                 <Link to="/profile" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm text-ink dark:text-ink-dark hover:bg-surface-light dark:hover:bg-glass-dark rounded-lg mx-1.5">
-                  <User className="w-4 h-4" /> Profile
+                  <User className="w-4 h-4" /> {t("common.profileNav")}
                 </Link>
                 <Link to="/settings" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm text-ink dark:text-ink-dark hover:bg-surface-light dark:hover:bg-glass-dark rounded-lg mx-1.5">
-                  <Settings className="w-4 h-4" /> Settings
+                  <Settings className="w-4 h-4" /> {t("common.settingsNav")}
                 </Link>
                 <div className="h-px bg-glass-border-light dark:bg-glass-border-dark my-1.5 mx-1.5" />
-                <button onClick={logout} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-danger hover:bg-danger-soft rounded-lg mx-1.5">
-                  <LogOut className="w-4 h-4" /> Log out
+                <button onClick={logout} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-danger hover:bg-danger-soft rounded-lg mx-1.5 cursor-pointer">
+                  <LogOut className="w-4 h-4" /> {t("common.signOut")}
                 </button>
               </motion.div>
             )}

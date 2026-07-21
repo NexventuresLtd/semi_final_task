@@ -8,7 +8,10 @@ import Button from "../ui/Button";
 import { loginSchema } from "../../utils/validators";
 import { useAuthStore } from "../../store/authStore";
 import image from "../../assets/logos/ferwafa-logo.png";
+import { useTranslation } from "react-i18next";
+
 export default function LoginForm() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
 
@@ -25,25 +28,29 @@ export default function LoginForm() {
         navigate("/totp-verify", { state: { tempToken: result.tempToken } });
         return;
       }
+      if (result.needsTotpSetup) {
+        navigate("/totp-setup");
+        return;
+      }
       const role = useAuthStore.getState().user?.role;
       navigate(`/${role}`, { replace: true });
     } catch (err) {
       const status = err.response?.status;
-      if (status === 403) toast.error("Please verify your email before signing in.");
-      else if (status === 423) toast.error("This account has been disabled. Contact your SG.");
-      else toast.error("Incorrect email or password");
+      if (status === 403) toast.error(t("auth.errorVerifyEmailFirst"));
+      else if (status === 423) toast.error(t("auth.errorAccountDisabled"));
+      else toast.error(t("auth.errorIncorrectCredentials"));
     }
   };
 
   return (
     <>
-      <center><img src={image} alt="" className="w-20 h-20"/></center>
-      <h1 className="font-display text-2xl font-semibold text-white mb-1.5">Welcome back</h1>
-      <p className="text-sm text-white muted mb-8">Sign in to FERWAFA Approvals</p>
+      <center><img src={image} alt="" className="w-20 h-20" /></center>
+      <h1 className="font-display text-2xl font-semibold text-ink mb-1.5">{t("auth.welcomeBack")}</h1>
+      <p className="text-sm text-ink-muted mb-8">{t("auth.signInSubtitle")}</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
-          label="Email address"
+          label={t("auth.email")}
           icon={Mail}
           type="email"
           error={errors.email?.message}
@@ -52,7 +59,7 @@ export default function LoginForm() {
 
         <div>
           <FormField
-            label="Password"
+            label={t("auth.password")}
             icon={Lock}
             type="password"
             error={errors.password?.message}
@@ -60,20 +67,20 @@ export default function LoginForm() {
           />
           <div className="flex justify-end mt-1.5">
             <Link to="/forgot-password" className="text-xs text-blue hover:underline">
-              Forgot password?
+              {t("auth.forgotPassword")}
             </Link>
           </div>
         </div>
 
         <Button type="submit" loading={isSubmitting} className="w-full mt-2 gap-1.5 cursor-pointer">
-          Sign in <ArrowRight className="w-4 h-4" />
+          {t("common.signIn")} <ArrowRight className="w-4 h-4" />
         </Button>
       </form>
 
-      <p className="text-sm text-white text-center mt-8">
-        New to FERWAFA?{" "}
+      <p className="text-sm text-ink-muted text-center mt-8">
+        {t("auth.newToFerwafa")}{" "}
         <Link to="/create-account" className="text-blue font-medium hover:underline">
-          Use your invitation
+          {t("auth.useYourInvitation")}
         </Link>
       </p>
     </>

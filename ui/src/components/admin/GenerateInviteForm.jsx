@@ -9,7 +9,7 @@ import { useGenerateInvite } from "../../hooks/useAdmin";
 import { DEPARTMENTS } from "../../utils/constants";
 
 const schema = z.object({
-  email: z.string().email("Enter a valid FERWAFA email").endsWith("@ferwafa.rw", "Must be a @ferwafa.rw address"),
+  email: z.string().email("Enter a valid FERWAFA email"),
   role: z.enum(["staff", "daf"]),
   department: z.string().min(1, "Select a department"),
 });
@@ -33,7 +33,7 @@ export default function GenerateInviteForm() {
 
   if (!open) {
     return (
-      <Button onClick={() => setOpen(true)} className="gap-1.5">
+      <Button onClick={() => setOpen(true)} className="gap-1.5 cursor-pointer">
         <UserPlus className="w-4 h-4" /> Invite a new user
       </Button>
     );
@@ -75,8 +75,8 @@ export default function GenerateInviteForm() {
         </div>
 
         <div className="flex gap-3 mt-1">
-          <Button type="submit" loading={generateInvite.isPending}>Send invitation</Button>
-          <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button type="submit" loading={generateInvite.isPending} className="cursor-pointer">Send invitation</Button>
+          <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="cursor-pointer">Cancel</Button>
         </div>
       </form>
     </GlassCard>

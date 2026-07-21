@@ -2,13 +2,7 @@ import { create } from "zustand";
 import axiosInstance from "../services/axiosInstance";
 
 export const useAuthStore = create((set, get) => ({
-  user: {
-    id: "1",
-    name: "Jean Claude",
-    role: "staff",           // swap to "daf" or "sg" to preview those dashboards
-    department: "referee",   // matches DEPARTMENTS in utils/constants.js
-    email: "jean@ferwafa.rw",
-  },
+  user: null, // { id, name, email, role, totp_enabled, ... }
   isAuthenticated: false,
   isLoading: true, // true until we've checked session on app load
 
@@ -16,14 +10,19 @@ export const useAuthStore = create((set, get) => ({
 
   login: async (credentials) => {
     const { data } = await axiosInstance.post("/auth/login", credentials);
-    // If backend indicates TOTP is required next, don't set user yet —
-    // the login page routes to the TOTP verification screen instead.
     if (data.requires_totp) {
       return { requiresTotp: true, tempToken: data.temp_token };
     }
     localStorage.setItem("ferwafa-access-token", data.access_token);
     set({ user: data.user, isAuthenticated: true, isLoading: false });
-    return { requiresTotp: false };
+
+    // First login before 2FA is enrolled — same access token works for the
+    // enrollment endpoints, but the frontend needs to route there instead
+    // of straight to the dashboard.
+    if (!data.user.totp_enabled) {
+      return { requiresTotp: false, needsTotpSetup: true };
+    }
+    return { requiresTotp: false, needsTotpSetup: false };
   },
 
   verifyTotp: async ({ tempToken, code }) => {
@@ -35,13 +34,46 @@ export const useAuthStore = create((set, get) => ({
     set({ user: data.user, isAuthenticated: true, isLoading: false });
   },
 
-  // Called once on app load to restore session via the refresh cookie
+  // Called once on app load to restore session.
+  // Strategy:
+  //   1. Try GET /users/me with the stored access token (fast path — no cookie round-trip).
+  //   2. If that fails, try POST /auth/refresh to get a new access token from the
+  //      httpOnly refresh cookie, then retry GET /users/me with it.
+  //   3. If both fail, clear state and let the user log in.
+  //
+  // _skipRefresh: true on the first request tells the axios interceptor NOT to
+  // handle the 401 itself — we're doing the retry manually here to avoid the
+  // infinite redirect loop (interceptor failure → window.location.href = /login
+  // → reload → fetchSession → interceptor failure → ...).
   fetchSession: async () => {
     try {
-      const { data } = await axiosInstance.get("/auth/me");
-      set({ user: data.user, isAuthenticated: true, isLoading: false });
-    } catch {
-      set({ user: null, isAuthenticated: false, isLoading: false });
+      // Step 1: try with the existing access token
+      const { data } = await axiosInstance.get("/users/me", {
+        _skipRefresh: true,
+      });
+      // /users/me returns the profile object directly (not wrapped in { user: ... })
+      set({ user: data, isAuthenticated: true, isLoading: false });
+    } catch (firstErr) {
+      if (firstErr.response?.status !== 401) {
+        // Non-auth error (network down, server error, etc.) — treat as logged out
+        set({ user: null, isAuthenticated: false, isLoading: false });
+        return;
+      }
+
+      // Step 2: access token is expired — try the refresh cookie
+      try {
+        const { data: refreshData } = await axiosInstance.post("/auth/refresh");
+        localStorage.setItem("ferwafa-access-token", refreshData.access_token);
+
+        const { data: meData } = await axiosInstance.get("/users/me", {
+          _skipRefresh: true,
+        });
+        set({ user: meData, isAuthenticated: true, isLoading: false });
+      } catch {
+        // Both failed — user must log in again
+        localStorage.removeItem("ferwafa-access-token");
+        set({ user: null, isAuthenticated: false, isLoading: false });
+      }
     }
   },
 

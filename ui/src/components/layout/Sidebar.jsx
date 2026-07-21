@@ -2,35 +2,39 @@ import { NavLink } from "react-router-dom";
 import { LayoutDashboard, FilePlus2, ListChecks, FileStack, Users, ShieldCheck, ClipboardList, User, Settings } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import logo from "../../assets/logos/ferwafa-logo.png";
+import { useTranslation } from "react-i18next";
 
-const NAV_BY_ROLE = {
-  staff: [
-    { to: "/staff", label: "Dashboard", icon: LayoutDashboard, end: true },
-    { to: "/staff/new-request", label: "New Request", icon: FilePlus2 },
-    { to: "/staff/my-requests", label: "My Requests", icon: ListChecks },
-    { to: "/staff/templates", label: "Templates", icon: FileStack },
-  ],
-  daf: [
-    { to: "/daf", label: "Dashboard", icon: LayoutDashboard, end: true },
-    { to: "/daf/approvals", label: "Approval Queue", icon: ClipboardList },
-  ],
-  sg: [
-    { to: "/sg", label: "Dashboard", icon: LayoutDashboard, end: true },
-    { to: "/sg/approvals", label: "Approval Queue", icon: ClipboardList },
-    { to: "/sg/admin", label: "User Management", icon: Users },
-    { to: "/sg/audit-trail", label: "Audit Trail", icon: ShieldCheck },
-  ],
-};
-
-const ACCOUNT_NAV = [
-  { to: "/profile", label: "Profile", icon: User },
-  { to: "/settings", label: "Settings", icon: Settings },
-];
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   const role = useAuthStore((s) => s.user?.role);
-  const links = NAV_BY_ROLE[role] || [];
+    const NAV_BY_ROLE = {
+    staff: [
+      { to: "/staff", label: t("common.dashboardNav"), icon: LayoutDashboard, end: true },
+      { to: "/staff/new-request", label: t("common.newRequestNav"), icon: FilePlus2 },
+      { to: "/staff/my-requests", label: t("common.myRequestsNav"), icon: ListChecks },
+      { to: "/staff/templates", label: t("common.templatesNav"), icon: FileStack },
+    ],
 
+    daf: [
+      { to: "/daf", label: t("common.dashboardNav"), icon: LayoutDashboard, end: true },
+      { to: "/daf/approvals", label: t("common.approvalQueueNav"), icon: ClipboardList },
+    ],
+
+    sg: [
+      { to: "/sg", label: t("common.dashboardNav"), icon: LayoutDashboard, end: true },
+      { to: "/sg/approvals", label: t("common.approvalQueueNav"), icon: ClipboardList },
+      { to: "/sg/admin", label: t("common.manageUsersNav"), icon: Users },
+      { to: "/sg/audit-trail", label:t("common.auditTrailNav"), icon: ShieldCheck },
+    ],
+  };
+
+  const ACCOUNT_NAV = [
+    { to: "/profile", label: t("common.profileNav"), icon: User },
+    { to: "/settings", label: t("common.settingsNav"), icon: Settings },
+  ];
+
+  const links = NAV_BY_ROLE[role] || [];
   const renderLink = ({ to, label, icon: Icon, end }) => (
     <NavLink
       key={to}
@@ -54,19 +58,19 @@ export default function Sidebar() {
           <img src={logo} alt="FERWAFA" className="w-9 h-9 object-contain" />
           <div className="leading-tight">
             <p className="font-display font-semibold text-sm text-ink dark:text-ink-dark">FERWAFA</p>
-            <p className="text-[11px] text-ink-muted dark:text-ink-muted-dark">Finance Approvals</p>
+            <p className="text-[11px] text-ink-muted dark:text-ink-muted-dark">{t("common.appName")}</p>
           </div>
         </div>
 
         {/* Scrollable nav area — independent from body/topbar scroll */}
         <div className="flex-1 min-h-0 overflow-y-auto pr-1 -mr-1">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark px-3 mb-2">
-            General
+            {t("common.general")}
           </p>
           <nav className="flex flex-col gap-1 mb-6">{links.map(renderLink)}</nav>
 
           <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark px-3 mb-2">
-            Profile Settings
+            {t("common.profileSettings")}
           </p>
           <nav className="flex flex-col gap-1">{ACCOUNT_NAV.map(renderLink)}</nav>
         </div>

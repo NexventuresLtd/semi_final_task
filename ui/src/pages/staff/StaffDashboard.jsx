@@ -8,17 +8,19 @@ import Button from "../../components/ui/Button";
 import GlassCard from "../../components/ui/GlassCard";
 import { useMyRequests, useDashboardStats } from "../../hooks/useRequests";
 import { useAuthStore } from "../../store/authStore";
+import { useTranslation } from "react-i18next";
 
 export default function StaffDashboard() {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const { data: stats, isLoading: statsLoading } = useDashboardStats();
   const { data: requests, isLoading: reqLoading } = useMyRequests();
 
   const statCards = [
-    { key: "pending", label: "Awaiting approval", value: stats?.pending ?? "–", span: "col-span-1" },
-    { key: "approved", label: "Approved this month", value: stats?.approved ?? "–", span: "col-span-1" },
-    { key: "rejected", label: "Rejected this month", value: stats?.rejected ?? "–", span: "col-span-1" },
-    { key: "pending", label: "Avg. approval time", value: stats?.avgTurnaround ?? "–", span: "col-span-1" },
+    { key: "pending", label: t("dashboardHome.awaitingApproval"), value: stats?.pending ?? "–", span: "col-span-1" },
+    { key: "approved", label: t("dashboardHome.approvedThisMonthAcc"), value: stats?.approved ?? "–", span: "col-span-1" },
+    { key: "rejected", label: t("dashboardHome.rejectedThisMonthAcc"), value: stats?.rejected ?? "–", span: "col-span-1" },
+    { key: "pending", label: t("dashboardHome.avgTurnaround"), value: stats?.avgTurnaround ?? "–", span: "col-span-1" },
   ];
 
   return (
@@ -28,14 +30,14 @@ export default function StaffDashboard() {
       <div className="flex items-center justify-between mb-2 flex-wrap gap-3">
         <div>
           <h1 className="font-display text-2xl font-semibold text-ink">
-            Welcome back, {user?.name?.split(" ")[0]}
+              {t("dashboard.welcomeBack", { name: user?.name?.split(" ")[0] })}
           </h1>
           <div className="flex items-center gap-2 mt-1.5">
             <DepartmentBadge department={user?.department} size="md" />
           </div>
         </div>
         <Link to="/staff/new-request">
-          <Button className="gap-1.5"><Plus className="w-4 h-4" /> New request</Button>
+           <Button className="gap-1.5"><Plus className="w-4 h-4" /> {t("dashboard.newRequest")}</Button>
         </Link>
       </div>
 
@@ -49,7 +51,9 @@ export default function StaffDashboard() {
         )}
       </div>
 
-      <h2 className="font-display text-lg font-semibold text-ink mb-3">Recent requests</h2>
+      <h2 className="font-display text-lg font-semibold text-ink mb-3">
+        {t("dashboard.recentRequests")}
+      </h2>
       {reqLoading ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => <div key={i} className="h-40 rounded-xl bg-surface-light animate-pulse" />)}
@@ -62,9 +66,13 @@ export default function StaffDashboard() {
         </div>
       ) : (
         <GlassCard className="text-center py-10">
-          <p className="text-ink-muted mb-4">You haven't submitted any requests yet.</p>
+          <p className="text-ink-muted mb-4">
+            {t("dashboard.noRequestsYet")}
+          </p>
           <Link to="/staff/new-request">
-            <Button variant="ghost">Create your first request</Button>
+            <Button variant="ghost">
+            {t("dashboard.createFirstRequest")}
+            </Button>
           </Link>
         </GlassCard>
       )}

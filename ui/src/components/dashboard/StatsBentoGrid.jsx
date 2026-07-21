@@ -18,7 +18,7 @@ export default function StatsBentoGrid({ stats }) {
         const Icon = ICONS[stat.key] || Clock;
         return (
           <BentoGrid.Item key={stat.label} span={stat.span || "col-span-1"}>
-            <GlassCard as={motion.div} className="h-full flex flex-col justify-between">
+            <GlassCard  className="h-full flex flex-col justify-between">
               <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${COLORS[stat.key]}`}>
                 <Icon className="w-4 h-4" />
               </div>

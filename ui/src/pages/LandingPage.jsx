@@ -1,30 +1,21 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, FileCheck2, Bell, Lock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Button from "../components/ui/Button";
 import LogoWatermark from "../components/ui/LogoWatermark";
 import HeroApprovalDemo from "../components/landing/HeroApprovalDemo";
 import logo from "../assets/logos/ferwafa-logo.png";
 
-const PROCESS = [
-  {
-    n: "01",
-    title: "Ferwafa Department",
-    desc: "A memo or purchase order is created and sent for review — nothing moves until it's complete.",
-  },
-  {
-    n: "02",
-    title: "DAF reviews",
-    desc: "The Director of Finance approves or sends it back with a reason. No stage is ever skipped.",
-  },
-  {
-    n: "03",
-    title: "SG confirms",
-    desc: "The Secretary General gives the final decision. The accountant is notified the moment it happens.",
-  },
-];
-
 export default function LandingPage() {
+  const { t } = useTranslation();
+
+  const PROCESS = [
+    { n: "01", title: t("landing.step1Title"), desc: t("landing.step1Desc") },
+    { n: "02", title: t("landing.step2Title"), desc: t("landing.step2Desc") },
+    { n: "03", title: t("landing.step3Title"), desc: t("landing.step3Desc") },
+  ];
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-bg-light">
       <LogoWatermark />
@@ -32,12 +23,13 @@ export default function LandingPage() {
       <header className="relative z-10 flex items-center justify-between px-6 lg:px-16 py-6 max-w-[1400px] mx-auto">
         <div className="flex items-center gap-2.5">
           <img src={logo} alt="FERWAFA" className="w-8 h-8 object-contain" />
-          <span className="font-display text-blue-500 font-semibold text-lg tracking-tight">FERWAFA · 
-            <span className="text-green-500">Departments </span>
+          <span className="font-display text-blue-500 font-semibold text-lg tracking-tight">
+            FERWAFA ·{" "}
+            <span className="text-green-500">{t("landing.departmentsTag")}</span>
           </span>
         </div>
         <Link to="/login">
-          <Button className="cursor-pointer" size="sm">Sign in</Button>
+          <Button className="cursor-pointer" size="sm">{t("landing.signIn")}</Button>
         </Link>
       </header>
 
@@ -49,40 +41,42 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xs  font-medium tracking-[0.15em] uppercase text-blue mb-4">
-              Ferwafa Departments · Internal System
+            <p className="text-xs font-medium tracking-[0.15em] uppercase text-blue mb-4">
+              {t("landing.eyebrowTag")}
             </p>
             <h1 className="font-display text-blue-400 text-4xl sm:text-5xl lg:text-[3.4rem] font-semibold leading-[1.08] max-w-xl">
-              Digital requisition to signature,
+              {t("landing.heroTitlePart1")}
               <br />
-              without the paper trail.
+              {t("landing.heroTitlePart2")}
             </h1>
             <p className="text-ink-muted max-w-md mt-5 text-[15px] leading-relaxed">
-              Every Request moves from Initiator to DAF to
-              Secretary General in strict order — tracked, notified, and
-              recorded at each step.
+              {t("landing.heroSubtitle")}
             </p>
 
             <div className="flex flex-wrap gap-3 mt-8 items-center">
               <Link to="/login">
                 <Button size="lg" className="gap-1.5 cursor-pointer">
-                  Sign in <ArrowRight className="w-4 h-4" />
+                  {t("landing.signIn")} <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link to="/create-account">
-                <button className="text-sm cursor-pointer text-blue-500 border-1 border-blue-500/20 rounded-md p-[13px]" size="lg">I have an invitation</button>
+                <button
+                  className="text-sm cursor-pointer text-blue-500 border-1 border-blue-500/20 rounded-md p-[13px]"
+                >
+                  {t("landing.haveInvitation")}
+                </button>
               </Link>
             </div>
 
             <div className="flex flex-wrap gap-x-8 gap-y-3 mt-12 pt-8 border-t border-glass-border-light">
               <div className="flex items-center gap-2 text-sm text-ink-muted">
-                <FileCheck2 className="w-4 h-4 text-blue" /> Three-stage approval
+                <FileCheck2 className="w-4 h-4 text-blue" /> {t("landing.threeStage")}
               </div>
               <div className="flex items-center gap-2 text-sm text-ink-muted">
-                <Bell className="w-4 h-4 text-blue" /> Notified at every step
+                <Bell className="w-4 h-4 text-blue" /> {t("landing.notifiedEveryStep")}
               </div>
               <div className="flex items-center gap-2 text-sm text-ink-muted">
-                <Lock className="w-4 h-4 text-blue" /> Invitation-only access
+                <Lock className="w-4 h-4 text-blue" /> {t("landing.invitationOnly")}
               </div>
             </div>
           </motion.div>
@@ -100,11 +94,11 @@ export default function LandingPage() {
         {/* Process — numbered because order genuinely carries meaning here */}
         <section className="py-16 border-t border-glass-border-light">
           <h2 className="font-display text-2xl text-gray-500 font-semibold mb-10 max-w-md">
-            How a request moves through the system
+            {t("landing.processTitle")}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {PROCESS.map((step) => (
-              <div key={step.n} className="relative text-blue-500">                
+              <div key={step.n} className="relative text-blue-500">
                 <h3 className="font-display font-semibold text-lg mb-2">{step.title}</h3>
                 <p className="text-sm text-ink-muted leading-relaxed">{step.desc}</p>
               </div>
@@ -118,11 +112,11 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <img src={logo} alt="FERWAFA" className="w-6 h-6 object-contain" />
             <span className="text-xs text-ink-muted">
-              © {new Date().getFullYear()} Rwanda Football Federation — Ferwafa Departments
+              © {new Date().getFullYear()} {t("landing.footerNote")}
             </span>
           </div>
           <Link to="/login" className="text-xs text-blue hover:underline">
-            Sign in to your account
+            {t("landing.signInToAccount")}
           </Link>
         </div>
       </footer>

@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { QRCodeSVG } from "qrcode.react";
 import { useNavigate } from "react-router-dom";
-import { ShieldCheck, ArrowRight } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
+import { ShieldCheck, Smartphone, ScanLine, KeyRound } from "lucide-react";
 import toast from "react-hot-toast";
 import Button from "../ui/Button";
-import { totpSchema } from "../../utils/validators";
+import OtpInput from "../ui/OtpInput";
 import { authService } from "../../services/authService";
 import { useAuthStore } from "../../store/authStore";
+
+const STEPS = [
+  { icon: Smartphone, text: "Install Google Authenticator on your phone, if you haven't already" },
+  { icon: ScanLine, text: "Open the app and scan the QR code below" },
+  { icon: KeyRound, text: "Enter the 6-digit code it generates to finish setup" },
+];
 
 export default function TotpEnrollment() {
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
   const [otpauthUrl, setOtpauthUrl] = useState(null);
   const [loadingQr, setLoadingQr] = useState(true);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({ resolver: zodResolver(totpSchema) });
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     authService
@@ -30,51 +31,66 @@ export default function TotpEnrollment() {
       .finally(() => setLoadingQr(false));
   }, []);
 
-  const onSubmit = async ({ code }) => {
+  const handleSubmit = async () => {
+    if (code.length !== 6) {
+      setError("Enter all 6 digits");
+      return;
+    }
+    setError("");
+    setSubmitting(true);
     try {
       const { data } = await authService.totpEnrollConfirm(code);
+      localStorage.setItem("ferwafa-access-token", data.access_token);
       setUser(data.user);
       toast.success("Two-factor authentication enabled");
       navigate(`/${data.user.role}`, { replace: true });
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid code — try again");
+      setError(err.response?.data?.message || "Incorrect code — try again");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div className="text-center">
-      <div className="w-11 h-11 rounded-xl bg-blue-soft flex items-center justify-center mx-auto mb-4">
-        <ShieldCheck className="w-5 h-5 text-blue" />
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-soft text-blue text-[11px] font-semibold uppercase tracking-wide mb-4">    
+        <ShieldCheck className="w-3.5 h-3.5" />
+        Required · One-time setup
       </div>
-      <h1 className="font-display text-2xl font-semibold text-ink mb-1.5">Secure your account</h1>
-      <p className="text-sm text-ink-muted mb-6">
-        Scan this with Google Authenticator, then enter the 6-digit code to finish setup.
+
+      <h1 className="font-display text-xl font-semibold text-ink mb-1">Secure your account</h1>
+      <p className="text-sm text-ink-muted mb-4 max-w-xs mx-auto">
+        Two-factor authentication protects every login on your account.
       </p>
 
-      <div className="flex justify-center mb-6">
+      <div className="flex flex-col gap-2 text-left bg-surface-light rounded-xl p-3.5 mb-4">
+        {STEPS.map((step, i) => (
+          <div key={i} className="flex items-center gap-3">
+            <div className="w-6 h-6 rounded-full bg-white border border-glass-border-light flex items-center justify-center shrink-0 text-[11px] font-semibold text-blue">
+              {i + 1}
+            </div>
+            <p className="text-xs text-ink-muted leading-snug">{step.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex justify-center mb-4">
         {loadingQr ? (
-          <div className="w-44 h-44 rounded-xl bg-surface-light animate-pulse" />
+          <div className="w-[152px] h-[152px] rounded-2xl bg-surface-light animate-pulse" />
         ) : (
-          <div className="p-4 bg-white rounded-xl border border-glass-border-light">
-            <QRCodeSVG value={otpauthUrl} size={176} />
+          <div className="relative p-3 bg-white rounded-2xl border-2 border-glass-border-light">
+            {/* corner accents unchanged */}
+            <QRCodeSVG value={otpauthUrl} size={128} />
           </div>
         )}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <input
-          {...register("code")}
-          inputMode="numeric"
-          maxLength={6}
-          placeholder="000000"
-          className="w-full rounded-lg border border-glass-border-light px-4 py-3 text-center text-xl font-mono tracking-[0.5em] text-ink outline-none focus:border-blue transition-colors"
-        />
-        {errors.code && <p className="text-danger text-xs">{errors.code.message}</p>}
+      <p className="text-xs font-medium text-ink-muted mb-2.5">Enter the 6-digit code</p>
+      <OtpInput value={code} onChange={setCode} error={error} />
 
-        <Button type="submit" loading={isSubmitting} className="w-full gap-1.5">
-          Confirm &amp; continue <ArrowRight className="w-4 h-4" />
-        </Button>
-      </form>
+      <Button onClick={handleSubmit} loading={submitting} className="w-full mt-4 gap-1.5 cursor-pointer">
+        Confirm &amp; continue
+      </Button>
     </div>
   );
 }

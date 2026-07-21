@@ -5,7 +5,7 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true, // refresh token lives in an httpOnly cookie
-  timeout: 5000, // hard cap at 5s per your speed requirement
+  timeout: 10000,
 });
 
 // Attach access token to every request
@@ -35,10 +35,12 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Don't attempt refresh on the refresh/login endpoints themselves
+    // Don't attempt refresh on these routes or requests explicitly marked to skip
     const isAuthRoute =
       originalRequest.url?.includes("/auth/login") ||
-      originalRequest.url?.includes("/auth/refresh");
+      originalRequest.url?.includes("/auth/refresh") ||
+      originalRequest.url?.includes("/auth/totp/verify") ||
+      originalRequest._skipRefresh === true; // used by fetchSession initial check
 
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthRoute) {
       if (isRefreshing) {
@@ -69,7 +71,11 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         localStorage.removeItem("ferwafa-access-token");
-        window.location.href = "/login"; // refresh failed — force re-login
+        // Only navigate if not already on /login — prevents the infinite reload loop
+        // where: fetchSession fails → redirect → reload → fetchSession → repeat
+        if (!window.location.pathname.startsWith("/login")) {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

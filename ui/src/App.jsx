@@ -24,7 +24,7 @@ export default function App() {
 
   useEffect(() => {
     initTheme();
-    // fetchSession(); // restores session via refresh cookie on page load
+    fetchSession(); // restores session via refresh cookie on page load
   }, []);
 
   return (

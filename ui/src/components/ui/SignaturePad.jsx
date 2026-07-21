@@ -16,10 +16,22 @@ export default function SignaturePad({ onSave, existingSignature }) {
   }, []);
 
   const getPos = (e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    const point = e.touches ? e.touches[0] : e;
-    return { x: point.clientX - rect.left, y: point.clientY - rect.top };
+  const canvas = canvasRef.current;
+  const rect = canvas.getBoundingClientRect();
+  const point = e.touches ? e.touches[0] : e;
+
+  // The canvas's internal drawing resolution (360x140) and its displayed
+  // CSS size (stretched to w-full) are different — without correcting for
+  // that ratio, mouse/touch coordinates drift away from where you're
+  // actually pointing, worse the wider the container is than 360px.
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+
+  return {
+    x: (point.clientX - rect.left) * scaleX,
+    y: (point.clientY - rect.top) * scaleY,
   };
+};
 
   const start = (e) => {
     setIsDrawing(true);
@@ -78,10 +90,10 @@ export default function SignaturePad({ onSave, existingSignature }) {
       </p>
 
       <div className="flex gap-2 mt-3">
-        <Button type="button" variant="ghost" size="sm" onClick={clear} className="gap-1.5">
+        <Button type="button" variant="ghost" size="sm" onClick={clear} className="gap-1.5 cursor-pointer">
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </Button>
-        <Button type="button" size="sm" disabled={!hasDrawn} onClick={save} className="gap-1.5">
+        <Button type="button" size="sm" disabled={!hasDrawn} onClick={save} className="gap-1.5 cursor-pointer">
           <Check className="w-3.5 h-3.5" /> Save signature
         </Button>
       </div>
