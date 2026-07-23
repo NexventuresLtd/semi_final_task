@@ -37,8 +37,8 @@ export default function InviteCodeForm() {
   return (
     <>
       <center><img src={image} alt="" className="w-20 h-20" /></center>
-      <h1 className="font-display text-2xl font-semibold text-white mb-1.5">{t("auth.createAccountTitle")}</h1>
-      <p className="text-sm text-white muted mb-8">
+      <h1 className="font-display text-2xl font-semibold text-center mb-1.5">{t("auth.createAccountTitle")}</h1>
+      <p className="text-sm text-center muted mb-8">
         {t("auth.createAccountSubtitleShort")}
       </p>
 
@@ -74,8 +74,8 @@ export default function InviteCodeForm() {
           {t("auth.verifyCode")} <ArrowRight className="w-4 h-4" />
         </Button>
 
-        <p className="text-sm text-ink-dark text-center mt-8">
-          {t("auth.backToLogin")}{" "}
+        <p className="text-sm text-black text-center mt-8">
+          {t("auth.backToLogin")}{": "}
           <Link to="/login" className="text-blue font-medium hover:underline">
             {t("common.signIn")}
           </Link>
