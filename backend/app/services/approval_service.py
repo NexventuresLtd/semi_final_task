@@ -41,4 +41,6 @@ def build_request_out(request: RequestRecord, requester: User, db: Session) -> d
         "field_values": json.loads(decrypt_field(request.field_values_encrypted) or "{}"),
         "signatures": json.loads(decrypt_field(request.signatures_encrypted) or "{}"),
         "template": {"id": template.id, "name": template.name, "fields": template.fields} if template else None,
+        "seenByApprover": request.seen_by_approver,
+
     }

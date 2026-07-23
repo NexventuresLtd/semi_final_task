@@ -11,6 +11,8 @@ from app.models.audit_log import AuditLog
 from app.schemas.request import CreateRequestPayload
 from app.services.approval_service import apply_signature, build_request_out
 from datetime import datetime, timedelta, timezone
+from app.services.notification_service import notify_new_request
+
 router = APIRouter(prefix="/requests", tags=["requests"])
 
 
@@ -68,6 +70,13 @@ def create_request(
 
     db.commit()
     db.refresh(request)
+
+    # Notify whichever role is now first in line to review this request
+    approver_role = "daf" if first_stage == RequestStage.DAF else "sg"
+    approvers = db.query(User).filter(User.role == approver_role, User.status == "active").all()
+    for approver in approvers:
+        notify_new_request(db, approver, request.title, user, request.id)
+    db.commit()
     return build_request_out(request, user, db)
 
 
@@ -130,3 +139,13 @@ def get_request(request_id: str, user: User = Depends(get_current_user), db: Ses
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Not your request")
 
     return build_request_out(request, requester, db)
+
+
+@router.post("/{request_id}/seen")
+def mark_request_seen(request_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    request = db.query(RequestRecord).filter(RequestRecord.id == request_id).first()
+    if request is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Request not found")
+    request.seen_by_approver = True
+    db.commit()
+    return {"message": "Marked as seen"}

@@ -8,6 +8,7 @@ import Avatar from "../ui/Avatar";
 import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from "react-i18next";
 import GlobalSearch from "./GlobalSearch";
+import NotificationBell from "./NotificationBell";
 
 export default function Topbar() {
   const user = useAuthStore((s) => s.user);
@@ -35,14 +36,7 @@ export default function Topbar() {
         <LanguageSwitcher className="cursor-pointer" /> 
         <ThemeToggle className="cursor-pointer"/>
 
-        <button aria-label="Notifications" className="relative glass-panel cursor-pointer w-11 h-11 flex items-center justify-center rounded-full p-0">
-          <Bell className="w-4 h-4 text-ink dark:text-ink-dark" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-danger text-[10px] text-white flex items-center justify-center">
-              {unreadCount}
-            </span>
-          )}
-        </button>
+        <NotificationBell />
 
         <div className="relative" ref={ref}>
           <button

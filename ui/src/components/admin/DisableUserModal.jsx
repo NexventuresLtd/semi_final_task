@@ -26,8 +26,8 @@ export default function DisableUserModal({ user, onClose, onConfirm }) {
               They'll immediately lose access. Their request history stays intact and visible in the audit trail.
             </p>
             <div className="flex gap-3">
-              <Button variant="danger" className="flex-1" onClick={onConfirm}>Disable user</Button>
-              <Button variant="ghost" onClick={onClose}>Cancel</Button>
+              <Button variant="danger" className="flex-1 cursor-pointer" onClick={onConfirm}>Disable user</Button>
+              <Button variant="ghost" className="cursor-pointer" onClick={onClose}>Cancel</Button>
             </div>
           </motion.div>
         </>

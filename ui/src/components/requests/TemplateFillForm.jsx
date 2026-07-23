@@ -64,7 +64,7 @@ export default function TemplateFillForm({ template }) {
           ))}
         </div>
 
-        <Button onClick={handleSubmit} loading={createRequest.isPending} className="w-full mt-6 gap-1.5">
+        <Button onClick={handleSubmit} loading={createRequest.isPending} className="w-full mt-6 gap-1.5 cursor-pointer">
           <Send className="w-4 h-4" /> Submit for approval
         </Button>
       </GlassCard>

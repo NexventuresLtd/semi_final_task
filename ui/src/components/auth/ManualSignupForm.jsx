@@ -41,7 +41,7 @@ export default function ManualSignupForm({ email, inviteToken, onBack }) {
         <FormField label="Password" icon={Lock} type="password" error={errors.password?.message} registration={register("password")} />
         <FormField label="Confirm password" icon={Lock} type="password" error={errors.confirmPassword?.message} registration={register("confirmPassword")} />
 
-        <Button type="submit" loading={isSubmitting} className="w-full mt-2 gap-1.5">
+        <Button type="submit" loading={isSubmitting} className="w-full mt-2 gap-1.5 cursor-pointer">
           Create account <ArrowRight className="w-4 h-4" />
         </Button>
       </form>

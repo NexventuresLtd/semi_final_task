@@ -9,8 +9,7 @@ from app.models.audit_log import AuditLog
 from app.models.comment import RequestComment
 from app.schemas.approval import ApprovalActionRequest
 from app.services.approval_service import apply_signature, build_request_out
-from app.services.email_service import approval_notification_html
-from app.tasks.email_tasks import send_email_task
+from app.services.notification_service import notify_decision, notify_new_request
 
 router = APIRouter(prefix="/approvals", tags=["approvals"])
 
@@ -19,32 +18,35 @@ STAGE_LABEL = {"daf": "Director of Finance", "sg": "Secretary General"}
 
 @router.get("/queue")
 def get_queue(user: User = Depends(require_role("daf", "sg")), db: Session = Depends(get_db)):
-    # DAF only ever sees financial-track requests waiting at the DAF stage.
-    # SG sees everything waiting at the SG stage — both financial requests
-    # that already cleared DAF, and general requests that skip DAF entirely.
     stage = RequestStage.DAF if user.role == "daf" else RequestStage.SG
-    requests = (
+
+    # Currently pending at my stage — still needs my decision
+    pending = (
         db.query(RequestRecord)
         .filter(RequestRecord.current_stage == stage, RequestRecord.status == RequestStatus.PENDING)
-        .order_by(RequestRecord.created_at.asc())
         .all()
     )
 
+    # Requests I've already personally approved/rejected — needed so the
+    # "Approved" tab has anything in it once a request moves past my stage
+    decided_ids = (
+        db.query(AuditLog.request_id)
+        .filter(AuditLog.actor_id == user.id, AuditLog.action.in_(["approved", "rejected"]))
+        .distinct()
+        .all()
+    )
+    decided_ids = [row[0] for row in decided_ids]
+    decided = db.query(RequestRecord).filter(RequestRecord.id.in_(decided_ids)).all() if decided_ids else []
+
+    # Merge + dedupe (a request could theoretically appear in both briefly)
+    all_requests = {r.id: r for r in pending + decided}.values()
+    sorted_requests = sorted(all_requests, key=lambda r: r.created_at, reverse=True)
+
     out = []
-    for r in requests:
+    for r in sorted_requests:
         requester = db.query(User).filter(User.id == r.requester_id).first()
         out.append(build_request_out(r, requester, db))
     return out
-
-
-def _notify_requester(request: RequestRecord, requester: User, decision: str, stage_label: str, comment: str | None):
-    if requester is None:
-        return
-    send_email_task.delay(
-        to_email=requester.email,
-        subject=f"Your request was {decision} — {request.title}",
-        html_body=approval_notification_html(request.title, decision, stage_label, comment),
-    )
 
 
 def _handle_decision(
@@ -59,7 +61,13 @@ def _handle_decision(
     request = db.query(RequestRecord).filter(RequestRecord.id == request_id).first()
     if request is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Request not found")
-
+    
+    # Guard added — same rule staff already have, now enforced for DAF/SG too
+    if not user.signature_image_encrypted:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            "Add your digital signature in Settings before approving or rejecting requests",
+        )
     expected_stage = RequestStage.DAF if stage == "daf" else RequestStage.SG
     if request.current_stage != expected_stage or request.status != RequestStatus.PENDING:
         raise HTTPException(status.HTTP_409_CONFLICT, "This request is no longer awaiting your review")
@@ -107,7 +115,13 @@ def _handle_decision(
     db.refresh(request)
 
     requester = db.query(User).filter(User.id == request.requester_id).first()
-    _notify_requester(request, requester, decision, STAGE_LABEL[stage], payload.comment)
+    notify_decision(db, requester, decision, STAGE_LABEL[stage], request.title, request.id, payload.comment)
+    if decision == "approved" and stage == "daf":
+        sg_users = db.query(User).filter(User.role == "sg", User.status == "active").all()
+    for sg_user in sg_users:
+        notify_new_request(db, sg_user, request.title, requester, request.id)
+
+    db.commit()
 
     return build_request_out(request, requester, db)
 

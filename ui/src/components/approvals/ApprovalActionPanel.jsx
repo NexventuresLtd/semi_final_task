@@ -33,10 +33,10 @@ export default function ApprovalActionPanel({ request, onApprove, onReject, isSu
 
       {!mode ? (
         <div className="flex gap-3">
-          <Button variant="primary" className="flex-1 gap-1.5" onClick={() => setMode("approve")}>
+          <Button variant="primary" className="flex-1 gap-1.5 cursor-pointer" onClick={() => setMode("approve")}>
             <Check className="w-4 h-4" /> Approve
           </Button>
-          <Button variant="danger" className="flex-1 gap-1.5" onClick={() => setMode("reject")}>
+          <Button variant="danger" className="flex-1 gap-1.5 cursor-pointer" onClick={() => setMode("reject")}>
             <X className="w-4 h-4" /> Reject
           </Button>
         </div>
@@ -56,7 +56,7 @@ export default function ApprovalActionPanel({ request, onApprove, onReject, isSu
           </div>
 
           <div className="flex gap-3">
-            <Button type="submit" variant={mode === "approve" ? "primary" : "danger"} loading={isSubmitting} className="flex-1">
+            <Button type="submit" variant={mode === "approve" ? "primary" : "danger"} loading={isSubmitting} className="flex-1 cursor-pointer">
               Confirm {mode === "approve" ? "approval" : "rejection"}
             </Button>
             <Button type="button" variant="ghost" onClick={() => setMode(null)}>Cancel</Button>

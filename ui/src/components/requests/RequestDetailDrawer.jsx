@@ -30,7 +30,7 @@ export default function RequestDetailDrawer({ request, onClose }) {
                 <DepartmentBadge department={request.department} />
                 <p className="text-xs text-ink-muted dark:text-ink-muted-dark capitalize">{request.type?.replace("_", " ")}</p>
               </div>
-              <button onClick={onClose} aria-label="Close" className="p-2 hover:bg-surface-light dark:hover:bg-glass-dark rounded-full">
+              <button onClick={onClose} aria-label="Close" className="p-2 hover:bg-surface-light dark:hover:bg-glass-dark rounded-full cursor-pointer">
                 <X className="w-4 h-4 text-ink dark:text-ink-dark" />
               </button>
             </div>
@@ -50,7 +50,7 @@ export default function RequestDetailDrawer({ request, onClose }) {
                   variant="ghost"
                   size="sm"
                   onClick={() => exportDocumentPdf(docRef, `ferwafa-${request.type}-${request.id}`)}
-                  className="w-full mt-3 gap-1.5"
+                  className="w-full mt-3 gap-1.5 cursor-pointer"
                 >
                   <Download className="w-4 h-4" /> Save signed document as PDF
                 </Button>

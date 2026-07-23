@@ -2,7 +2,7 @@ import uuid
 import json
 import enum
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, DateTime, Text, Float, Enum as SAEnum, ForeignKey
+from sqlalchemy import Boolean, Column, String, DateTime, Text, Float, Enum as SAEnum, ForeignKey
 from app.database import Base
 
 # Financial requests move Staff -> DAF -> SG.
@@ -57,3 +57,5 @@ class RequestRecord(Base):
 
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    seen_by_approver = Column(Boolean, nullable=False, default=False)
+    

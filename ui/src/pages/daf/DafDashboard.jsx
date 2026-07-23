@@ -33,7 +33,7 @@ export default function DafDashboard() {
           </p>
         </div>
         <Link to="/daf/approvals">
-          <Button className="gap-1.5"><ClipboardList className="w-4 h-4 cursor-pointer" /> Review queue</Button>
+          <Button className="gap-1.5 cursor-pointer"><ClipboardList className="w-4 h-4 " /> Review queue</Button>
         </Link>
       </div>
 

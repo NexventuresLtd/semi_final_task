@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import auth, admin, users, templates, requests, approvals, activity
+from app.routers import notifications
+from app.routers import ws
 
 is_production = settings.app_env == "production"
 app = FastAPI(
@@ -31,3 +33,5 @@ app.include_router(templates.router, prefix="/api")
 app.include_router(requests.router, prefix="/api")
 app.include_router(approvals.router, prefix="/api")
 app.include_router(activity.router, prefix="/api")
+app.include_router(notifications.router, prefix="/api")
+app.include_router(ws.router, prefix="/api")

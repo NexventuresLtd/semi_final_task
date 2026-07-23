@@ -37,7 +37,7 @@ export default function StaffDashboard() {
           </div>
         </div>
         <Link to="/staff/new-request">
-           <Button className="gap-1.5"><Plus className="w-4 h-4" /> {t("dashboard.newRequest")}</Button>
+           <Button className="gap-1.5 cursor-pointer"><Plus className="w-4 h-4"  /> {t("dashboard.newRequest")}</Button>
         </Link>
       </div>
 
@@ -70,7 +70,7 @@ export default function StaffDashboard() {
             {t("dashboard.noRequestsYet")}
           </p>
           <Link to="/staff/new-request">
-            <Button variant="ghost">
+            <Button variant="ghost" className="cursor-pointer">
             {t("dashboard.createFirstRequest")}
             </Button>
           </Link>

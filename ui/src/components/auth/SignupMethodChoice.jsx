@@ -57,7 +57,7 @@ export default function SignupMethodChoice() {
               <div className="h-px flex-1 bg-glass-border-light" />
             </div>
 
-            <Button variant="ghost" onClick={() => setShowManual(true)}>
+            <Button variant="ghost" onClick={() => setShowManual(true)} className="cursor-pointer">
               Sign up with email &amp; password
             </Button>
           </div>

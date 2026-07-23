@@ -21,16 +21,16 @@ export default function AuthLayout({ children, taglines, workflowPoints, securit
     // regardless of what wraps it. overflow-y-auto lets content scroll
     // WITHIN this fixed frame if it's ever taller than the viewport,
     // instead of the whole page growing and leaving background gaps.
-    <div className="fixed inset-0 overflow-y-auto bg-ink">
+    <div className="fixed inset-0 overflow-y-auto bg-ink ">
       <motion.img
-        src={officePhoto}
+        src={"https://wallpaperaccess.com/full/1236474.jpg"}
         alt="FERWAFA head office, Kigali"
         initial={{ scale: 1 }}
         animate={{ scale: 1.08 }}
         transition={{ duration: 30, ease: "linear" }}
-        className="fixed inset-0 w-full h-full object-cover -z-10"
+        className="fixed inset-0 w-full h-full object-cover -z-10 "
       />
-      <div className="fixed inset-0 bg-gradient-to-bl from-ink/95 via-ink/85 to-ink/60 -z-10" />
+      <div className="fixed inset-0 bg-gradient-to-bl  to-ink/60 -z-10" />
       <div className="fixed inset-0 bg-gradient-to-t from-ink via-transparent to-transparent -z-10" />
 
       <div className="relative z-10 min-h-full flex flex-col lg:flex-row items-center justify-center gap-8 p-4 sm:p-8 max-w-[1400px] mx-auto">
@@ -88,7 +88,7 @@ export default function AuthLayout({ children, taglines, workflowPoints, securit
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="w-full max-w-[420px] shrink-0 my-auto"
         >
-          <div className="rounded-2xl bg-white/95 backdrop-blur-2xl border border-white/40 shadow-[0_24px_60px_rgba(0,0,0,0.35)] p-7 sm:p-8">
+          <div className="rounded-2xl bg-white backdrop-blur-2xl border border-white/40 shadow-[0_24px_60px_rgba(0,0,0,0.35)] p-7 sm:p-8">
             <div className="lg:hidden flex items-center gap-2.5 mb-6">
               <img src={logo} alt="FERWAFA" className="w-8 h-8 object-contain" />
               <span className="font-display font-semibold text-sm text-ink tracking-tight">

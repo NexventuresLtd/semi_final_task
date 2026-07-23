@@ -1,12 +1,25 @@
 import { create } from "zustand";
 import axiosInstance from "../services/axiosInstance";
 
+// Backend returns snake_case (signature_image); frontend components were
+// written expecting camelCase (signatureImage). Normalizing once here
+// means every component downstream can keep using user.signatureImage
+// without needing individual fixes.
+const normalizeUser = (user) => {
+  if (!user) return user;
+  const { signature_image, ...rest } = user;
+  return {
+    ...rest,
+    signatureImage: signature_image ?? user.signatureImage ?? null,
+  };
+};
+
 export const useAuthStore = create((set, get) => ({
-  user: null, // { id, name, email, role, totp_enabled, ... }
+  user: null, // { id, name, email, role, totp_enabled, signatureImage, ... }
   isAuthenticated: false,
   isLoading: true, // true until we've checked session on app load
 
-  setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
+  setUser: (user) => set({ user: normalizeUser(user), isAuthenticated: !!user, isLoading: false }),
 
   login: async (credentials) => {
     const { data } = await axiosInstance.post("/auth/login", credentials);
@@ -14,7 +27,7 @@ export const useAuthStore = create((set, get) => ({
       return { requiresTotp: true, tempToken: data.temp_token };
     }
     localStorage.setItem("ferwafa-access-token", data.access_token);
-    set({ user: data.user, isAuthenticated: true, isLoading: false });
+    set({ user: normalizeUser(data.user), isAuthenticated: true, isLoading: false });
 
     // First login before 2FA is enrolled — same access token works for the
     // enrollment endpoints, but the frontend needs to route there instead
@@ -31,7 +44,7 @@ export const useAuthStore = create((set, get) => ({
       code,
     });
     localStorage.setItem("ferwafa-access-token", data.access_token);
-    set({ user: data.user, isAuthenticated: true, isLoading: false });
+    set({ user: normalizeUser(data.user), isAuthenticated: true, isLoading: false });
   },
 
   // Called once on app load to restore session.
@@ -52,7 +65,7 @@ export const useAuthStore = create((set, get) => ({
         _skipRefresh: true,
       });
       // /users/me returns the profile object directly (not wrapped in { user: ... })
-      set({ user: data, isAuthenticated: true, isLoading: false });
+      set({ user: normalizeUser(data), isAuthenticated: true, isLoading: false });
     } catch (firstErr) {
       if (firstErr.response?.status !== 401) {
         // Non-auth error (network down, server error, etc.) — treat as logged out
@@ -68,7 +81,7 @@ export const useAuthStore = create((set, get) => ({
         const { data: meData } = await axiosInstance.get("/users/me", {
           _skipRefresh: true,
         });
-        set({ user: meData, isAuthenticated: true, isLoading: false });
+        set({ user: normalizeUser(meData), isAuthenticated: true, isLoading: false });
       } catch {
         // Both failed — user must log in again
         localStorage.removeItem("ferwafa-access-token");

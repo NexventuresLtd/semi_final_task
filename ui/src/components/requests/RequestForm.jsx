@@ -90,8 +90,8 @@ export default function RequestForm() {
         </div>
 
         <div className="flex gap-3 mt-2">
-          <Button type="submit" loading={isSubmitting}>Submit for approval</Button>
-          <Button type="button" variant="ghost" onClick={() => navigate(-1)}>Cancel</Button>
+          <Button type="submit" className="cursor-pointer" loading={isSubmitting}>Submit for approval</Button>
+          <Button type="button" className="cursor-pointer" variant="ghost" onClick={() => navigate(-1)}>Cancel</Button>
         </div>
       </form>
     </GlassCard>

@@ -88,7 +88,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
 
           <button
             onClick={() => setShowFilters((s) => !s)}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm border transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-2 cursor-pointer rounded-lg text-sm border transition-colors ${
               activeFilterCount > 0 ? "border-blue text-blue bg-blue-soft" : "border-glass-border-light dark:border-glass-border-dark text-ink dark:text-ink-dark"
             }`}
           >
@@ -96,7 +96,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
             Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
           </button>
 
-          <Button variant="ghost" size="sm" onClick={exportPdf} className="gap-1.5">
+          <Button variant="ghost" size="sm" onClick={exportPdf} className="gap-1.5 cursor-pointer">
             <Download className="w-4 h-4" /> Export PDF
           </Button>
         </div>
@@ -107,7 +107,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
             <button
               key={t.value}
               onClick={() => { setTypeFilter(t.value); setPage(1); }}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
                 typeFilter === t.value
                   ? "bg-blue text-white"
                   : "bg-surface-light dark:bg-glass-dark text-ink-muted dark:text-ink-muted-dark hover:text-ink dark:hover:text-ink-dark"

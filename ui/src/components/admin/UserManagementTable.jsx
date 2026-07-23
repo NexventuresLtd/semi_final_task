@@ -62,7 +62,7 @@ export default function UserManagementTable() {
                   <button
                     onClick={() => handleResetTotp(u.id)}
                     title="Reset 2FA"
-                    className="p-2 rounded-lg hover:bg-surface-light dark:hover:bg-glass-dark"
+                    className="p-2 rounded-lg hover:bg-surface-light dark:hover:bg-glass-dark cursor-pointer"
                   >
                     <KeyRound className="w-4 h-4 text-ink-muted dark:text-ink-muted-dark" />
                   </button>
@@ -70,7 +70,7 @@ export default function UserManagementTable() {
                     <button
                       onClick={() => toggleStatus.mutate({ userId: u.id, status: "active" })}
                       title="Re-enable user"
-                      className="p-2 rounded-lg hover:bg-green-soft"
+                      className="p-2 rounded-lg hover:bg-green-soft cursor-pointer"
                     >
                       <ShieldCheck className="w-4 h-4 text-green" />
                     </button>
@@ -78,7 +78,7 @@ export default function UserManagementTable() {
                     <button
                       onClick={() => setConfirmingDisable(u)}
                       title="Disable user"
-                      className="p-2 rounded-lg hover:bg-danger-soft"
+                      className="p-2 rounded-lg hover:bg-danger-soft cursor-pointer"
                     >
                       <ShieldOff className="w-4 h-4 text-danger" />
                     </button>

@@ -45,8 +45,8 @@ export default function LoginForm() {
   return (
     <>
       <center><img src={image} alt="" className="w-20 h-20" /></center>
-      <h1 className="font-display text-2xl font-semibold text-ink mb-1.5">{t("auth.welcomeBack")}</h1>
-      <p className="text-sm text-ink-muted mb-8">{t("auth.signInSubtitle")}</p>
+      <h1 className="font-display text-2xl text-center font-semibold text-ink mb-1.5">{t("auth.welcomeBack")}</h1>
+      <p className="text-sm text-ink-muted text-center mb-8">{t("auth.signInSubtitle")}</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField

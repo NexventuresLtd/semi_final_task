@@ -34,7 +34,9 @@ export default function SgDashboard() {
         </div>
         <div className="flex gap-2">
           <Link to="/sg/approvals">
-            <Button variant="ghost" className="gap-1.5 cursor-pointer"><ClipboardList className="w-4 h-4" /> Review queue</Button>
+            <Button variant="ghost" className="gap-1.5 cursor-pointer">
+              <ClipboardList className="w-4 h-4" /> Review queue
+            </Button>
           </Link>
           <Link to="/sg/admin">
             <Button className="gap-1.5 cursor-pointer"><Users className="w-4 h-4 " /> Manage users</Button>
