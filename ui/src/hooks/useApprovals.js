@@ -2,10 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { approvalService } from "../services/approvalService";
 
-export function useApprovalQueue() {
+export function useApprovalQueue(options = {}) {
   return useQuery({
     queryKey: ["approvals", "queue"],
     queryFn: () => approvalService.getQueue().then((r) => r.data),
+    enabled: options.enabled ?? true,
   });
 }
 

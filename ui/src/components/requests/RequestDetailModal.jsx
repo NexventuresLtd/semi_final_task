@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, MessageSquare, Download } from "lucide-react";
 import RequestTimeline from "./RequestTimeline";
@@ -10,7 +11,20 @@ import Button from "../ui/Button";
 import { exportDocumentPdf } from "../../utils/exportDocumentPdf";
 
 export default function RequestDetailModal({ request, onClose, onApprove, onReject, isSubmitting, showActions = false }) {
+  const [exporting, setExporting] = useState(false);
   const docRef = useRef(null);
+
+  const handleExportPdf = async () => {
+    setExporting(true);
+    try {
+        await exportDocumentPdf(docRef, `ferwafa-${request.type}-${request.id}`);
+    } catch (err) {
+        console.error("PDF export failed:", err);
+        toast.error("Could not generate PDF — see console for details");
+    } finally {
+        setExporting(false);
+    }
+};
 
   return (
     <AnimatePresence>
@@ -84,12 +98,14 @@ export default function RequestDetailModal({ request, onClose, onApprove, onReje
             </div>
 
             <div className="px-6 py-4 border-t border-glass-border-light dark:border-glass-border-dark shrink-0">
-              <Button                
-                onClick={() => exportDocumentPdf(docRef, `ferwafa-${request.type}-${request.id}`)}
+              <Button
+                onClick={handleExportPdf}
+                loading={exporting}
                 className="w-full gap-1.5 cursor-pointer bg-green-500 hover:bg-green-400 hover:opacity-80"
-              >
+                >
                 <Download className="w-4 h-4" /> Save as PDF (A4)
-              </Button>
+            </Button>
+            
             </div>
           </motion.div>
         </>

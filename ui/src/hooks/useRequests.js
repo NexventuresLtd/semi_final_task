@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { requestService } from "../services/requestService";
 
-export function useMyRequests() {
+export function useMyRequests(options = {}) {
   return useQuery({
     queryKey: ["requests", "mine"],
     queryFn: () => requestService.getMyRequests().then((r) => r.data),
+    enabled: options.enabled ?? true,
   });
 }
 

@@ -21,8 +21,8 @@ export default function GlobalSearch() {
   // Staff search their own requests; DAF/SG search whatever is currently
   // in their approval queue — the two data sources each role already has
   // loaded elsewhere, so this adds no new backend calls.
-  const { data: myRequests } = useMyRequests();
-  const { data: queueRequests } = useApprovalQueue();
+  const { data: myRequests } = useMyRequests({ enabled: role === "staff" });
+const { data: queueRequests } = useApprovalQueue({ enabled: role === "daf" || role === "sg" });
   const pool = role === "staff" ? myRequests : queueRequests;
 
   const results = query.trim()

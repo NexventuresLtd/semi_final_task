@@ -5,15 +5,19 @@ function waitForImages(node) {
   const images = Array.from(node.querySelectorAll("img"));
   return Promise.all(
     images.map((img) => {
-      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      // img.complete is true once loading has finished, success OR failure —
+      // if that already happened before this function ran, onload/onerror
+      // will never fire again, so we must resolve immediately here instead
+      // of waiting on events that already happened in the past.
+      if (img.complete) return Promise.resolve();
+
       return new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve; // don't hang forever on a genuinely broken image
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
       });
     })
   );
 }
-
 export async function exportDocumentPdf(nodeRef, filename = "request") {
   const node = nodeRef.current;
   if (!node) return;

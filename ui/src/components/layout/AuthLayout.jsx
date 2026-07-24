@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, ShieldCheck, CheckCircle2 } from "lucide-react";
 import logo from "../../assets/logos/ferwafa-logo.png";
-import officePhoto from "../../assets/logos/ferwafa-office.jpg";
+import background from "../../assets/logos/ferwafa-background.jpg";
 
 export default function AuthLayout({ children, taglines, workflowPoints, securityLine }) {
   const [taglineIndex, setTaglineIndex] = useState(0);
@@ -23,7 +23,7 @@ export default function AuthLayout({ children, taglines, workflowPoints, securit
     // instead of the whole page growing and leaving background gaps.
     <div className="fixed inset-0 overflow-y-auto bg-ink ">
       <motion.img
-        src={"https://wallpaperaccess.com/full/1236474.jpg"}
+        src={background}
         alt="FERWAFA head office, Kigali"
         initial={{ scale: 1 }}
         animate={{ scale: 1.08 }}

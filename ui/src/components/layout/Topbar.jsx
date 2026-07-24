@@ -28,9 +28,7 @@ export default function Topbar() {
 
   return (
     <header className="glass-panel flex items-center justify-between px-4 py-3 mb-6 sticky top-4 z-40">
-      <button className="hidden sm:flex items-center gap-2 text-sm text-ink-muted dark:text-ink-muted-dark">
-          <GlobalSearch />        
-      </button>
+        <GlobalSearch />      
 
       <div className="flex items-center gap-3 ml-auto">
         <LanguageSwitcher className="cursor-pointer" /> 

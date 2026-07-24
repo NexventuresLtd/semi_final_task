@@ -1,5 +1,5 @@
-import logo from "../../assets/logos/ferwafa-logo.png";
 import { forwardRef } from "react";
+import logo from "../../assets/logos/ferwafa-logo.png";
 
 /**
  * Renders the filled template as a formal document with three signature
@@ -7,9 +7,12 @@ import { forwardRef } from "react";
  * plus a timestamp/actor audit line the moment that stage approves —
  * the image alone is decorative; the audit line is what actually proves it.
  */
-function TemplateDocumentPreview({ template, values, signatures = {} }, ref) {
+const TemplateDocumentPreview = forwardRef(function TemplateDocumentPreview(
+  { template, values, signatures = {} },
+  ref
+) {
   return (
-    <div ref={ref} className="bg-white border border-glass-border-light rounded-xl p-8 max-w-2xl mx-auto shadow-sm">    
+    <div ref={ref} className="bg-white border border-glass-border-light rounded-xl p-8 max-w-2xl mx-auto shadow-sm">
       <div className="flex items-center gap-3 pb-4 mb-6 border-b-2 border-ink">
         <img src={logo} alt="FERWAFA" className="w-14 h-14 object-contain" />
         <div>
@@ -38,7 +41,7 @@ function TemplateDocumentPreview({ template, values, signatures = {} }, ref) {
       </div>
     </div>
   );
-}
+});
 
 function SignatureSlot({ label, role, signatures }) {
   const sig = signatures[role];
