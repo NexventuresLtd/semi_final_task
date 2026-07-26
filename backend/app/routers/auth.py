@@ -22,6 +22,8 @@ from app.core.invite_codes import verify_code
 from app.core.email_tokens import create_email_verification_token, verify_email_verification_token, create_password_reset_token, verify_password_reset_token
 from app.services.email_service import verification_email_html,password_reset_email_html
 from app.tasks.email_tasks import send_email_task
+from sqlalchemy.exc import IntegrityError
+from google.auth.exceptions import GoogleAuthError
 from app.schemas.auth import (
     VerifyInviteRequest, VerifyInviteResponse, ManualSignupRequest,
     GoogleSignupRequest, VerifyEmailRequest, ResendVerificationRequest,ForgotPasswordRequest, ResetPasswordRequest
@@ -271,15 +273,18 @@ def signup_manual(payload: ManualSignupRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/signup/google", response_model=TokenResponse)
-def signup_google(payload: GoogleSignupRequest, response: Response, db: Session = Depends(get_db)):
+def signup_google(payload: GoogleSignupRequest, req: Request, response: Response, db: Session = Depends(get_db)):
     invite = _resolve_invite(payload.invite_token, db)
 
     try:
         google_info = google_id_token.verify_oauth2_token(
             payload.id_token, google_requests.Request(), settings.google_client_id
         )
-    except ValueError:
+    except (ValueError, GoogleAuthError):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid Google credential")
+
+    if not google_info.get("email_verified", False):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "This Google account's email isn't verified")
 
     google_email = google_info.get("email")
     if google_email != invite.email:
@@ -290,19 +295,35 @@ def signup_google(payload: GoogleSignupRequest, response: Response, db: Session 
         name=google_info.get("name", invite.email),
         role=invite.role,
         department=invite.department,
-        status="active",  # Google already proved inbox ownership — no separate email step needed
+        status="active",
         google_id=google_info["sub"],
     )
     db.add(user)
     invite.used = True
-    db.commit()
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status.HTTP_409_CONFLICT, "This Google account is already linked to another user")
+
     db.refresh(user)
 
     access_token = create_token(user.id, user.role, "access")
     _set_refresh_cookie(response, user.id, user.role)
 
-    return TokenResponse(access_token=access_token, user=UserOut.model_validate(user))
+    # Google signup skips TOTP verification entirely on this first call, so
+    # it needs its own session log — every other login path gets this via
+    # totp_verify(), but this one never passes through there.
+    user_agent = req.headers.get("user-agent", "Unknown device")
+    db.add(LoginSession(
+        user_id=user.id,
+        device=_parse_device(user_agent),
+        ip_address=req.client.host if req.client else None,
+    ))
+    db.commit()
 
+    return TokenResponse(access_token=access_token, user=UserOut.model_validate(user))
 
 @router.post("/verify-email")
 def verify_email(payload: VerifyEmailRequest, db: Session = Depends(get_db)):
