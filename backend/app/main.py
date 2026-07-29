@@ -1,3 +1,4 @@
+import threading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
@@ -21,6 +22,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
+def start_celery_worker():
+    """
+    Runs the Celery worker inside this same process, in a background
+    thread, instead of as a separate deployed service. This avoids
+    needing a paid Render Background Worker plan at current scale —
+    the tradeoff is that heavy background load would compete with the
+    web server for CPU/memory within one instance, which matters far
+    less at a single federation's traffic level than it would at
+    real scale.
+    """
+    from app.tasks.celery_app import celery_app
+    worker = celery_app.Worker(loglevel="info", pool="solo")
+    worker.start()
+
+
+@app.on_event("startup")
+def on_startup():
+    if is_production:
+        thread = threading.Thread(target=start_celery_worker, daemon=True)
+        thread.start()
+        
 
 @app.get("/health")
 def health_check():
