@@ -35,3 +35,6 @@ email-validator==2.2.0
 # File / misc
 python-multipart==0.0.20
 python-dotenv==1.0.1
+
+#PostgreSQL driver
+psycopg2-binary==2.9.10

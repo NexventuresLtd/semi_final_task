@@ -1,0 +1,9 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+ferwafa.db
+.git/
+reset_users.py
+run.txt
