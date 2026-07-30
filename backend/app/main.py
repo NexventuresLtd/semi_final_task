@@ -1,11 +1,13 @@
 import threading
 from fastapi import FastAPI
+import logging
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import auth, admin, users, templates, requests, approvals, activity
 from app.routers import notifications
 from app.routers import ws
 
+logger = logging.getLogger("uvicorn.error")
 is_production = settings.app_env == "production"
 app = FastAPI(
     title="FERWAFA Approvals API",
@@ -25,26 +27,26 @@ app.add_middleware(
 
 
 def start_celery_worker():
-    """
-    Runs the Celery worker inside this same process, in a background
-    thread, instead of as a separate deployed service. This avoids
-    needing a paid Render Background Worker plan at current scale —
-    the tradeoff is that heavy background load would compete with the
-    web server for CPU/memory within one instance, which matters far
-    less at a single federation's traffic level than it would at
-    real scale.
-    """
-    from app.tasks.celery_app import celery_app
-    worker = celery_app.Worker(loglevel="info", pool="solo")
-    worker.start()
+    logger.info("Starting Celery worker thread...")
+    try:
+        from app.tasks.celery_app import celery_app
+        worker = celery_app.Worker(loglevel="info", pool="solo")
+        logger.info("Celery worker object created, calling .start()...")
+        worker.start()
+    except Exception:
+        logger.exception("Celery worker thread crashed on startup")
 
 
 @app.on_event("startup")
 def on_startup():
+    logger.info(f"APP_ENV is: {settings.app_env}")
     if is_production:
+        logger.info("Production mode — launching Celery worker thread")
         thread = threading.Thread(target=start_celery_worker, daemon=True)
         thread.start()
-        
+    else:
+        logger.info("Not production — skipping Celery worker thread")
+
 
 @app.get("/health")
 def health_check():
