@@ -59,7 +59,7 @@ def _set_refresh_cookie(response: Response, user_id: str, role: str):
         value=token,
         httponly=True,           # never readable by JS — this is what protects it from XSS
         secure=settings.app_env == "production",  # HTTPS-only in production
-        samesite="lax",
+        samesite="none" if settings.app_env == "production" else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
         path="/api/auth",
     )
