@@ -5,3 +5,4 @@ celery_app = Celery("ferwafa", broker=settings.redis_url, backend=settings.redis
 celery_app.conf.task_serializer = "json"
 celery_app.conf.result_serializer = "json"
 celery_app.conf.accept_content = ["json"]
+celery_app.conf.broker_connection_retry_on_startup = True 
