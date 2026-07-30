@@ -8,7 +8,7 @@ from app.routers import notifications
 from app.routers import ws
 
 logger = logging.getLogger("uvicorn.error")
-is_production = settings.app_env == "production"
+is_production = settings.app_env.lower() == "production"
 app = FastAPI(
     title="FERWAFA Approvals API",
     docs_url=None if is_production else "/docs",
