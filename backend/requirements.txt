@@ -9,6 +9,7 @@ alembic==1.14.0
 # Auth & security
 python-jose[cryptography]==3.3.0      # JWT
 passlib[bcrypt]==1.7.4                # password hashing
+bcrypt==4.0.1
 pyotp==2.9.0                          # Google Authenticator TOTP
 qrcode==8.0                           # TOTP QR generation
 cryptography==43.0.3                  # field-level encryption (Fernet/AES)
