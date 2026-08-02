@@ -21,6 +21,16 @@ export default function TemplateFillForm({ template }) {
     : {};
 
   const handleSubmit = async () => {
+    const emptyFields = template.fields?.filter((field) => {
+      const val = values[field.label];
+      return val === undefined || val === null || String(val).trim() === "";
+    });
+
+    if (emptyFields && emptyFields.length > 0) {
+      toast.error("Empty fields need to be filled with data before submitting.");
+      return;
+    }
+
     if (!user?.signatureImage) {
       toast.error("Add your digital signature in Settings before submitting a request.");
       return;

@@ -23,5 +23,15 @@ export function useCreateRequest() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["requests"] });
     },
+    onError: (err) => {
+      const msg =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        "Could not submit request";
+      // toast is shown by the caller (TemplateFillForm) so we just re-throw
+      // the enriched message — but keep this here as a safety net for any
+      // future callers that don't have their own error handling.
+      throw new Error(msg);
+    },
   });
 }

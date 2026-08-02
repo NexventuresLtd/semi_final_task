@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ClipboardList, Users, ShieldCheck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import StatsBentoGrid from "../../components/dashboard/StatsBentoGrid";
 import ApprovalTrendChart from "../../components/dashboard/ApprovalTrendChart";
 import Button from "../../components/ui/Button";
@@ -9,14 +10,15 @@ import { useDashboardStats } from "../../hooks/useRequests";
 import { useAuthStore } from "../../store/authStore";
 
 export default function SgDashboard() {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const { data: stats, isLoading } = useDashboardStats();
 
   const statCards = [
-    { key: "pending", label: "Awaiting your review", value: stats?.pending ?? "–", span: "col-span-1" },
-    { key: "approved", label: "You approved this month", value: stats?.approved ?? "–", span: "col-span-1" },
-    { key: "rejected", label: "You rejected this month", value: stats?.rejected ?? "–", span: "col-span-1" },
-    { key: "users", label: "Active users", value: stats?.activeUsers ?? "–", span: "col-span-1" },
+    { key: "pending", label: t("dashboardHome.yourReview"), value: stats?.pending ?? "–", span: "col-span-1" },
+    { key: "approved", label: t("dashboardHome.approvedThisMonth"), value: stats?.approved ?? "–", span: "col-span-1" },
+    { key: "rejected", label: t("dashboardHome.rejectedThisMonth"), value: stats?.rejected ?? "–", span: "col-span-1" },
+    { key: "users", label: t("dashboardHome.activeUsers"), value: stats?.activeUsers ?? "–", span: "col-span-1" },
   ];
 
   return (
@@ -26,20 +28,20 @@ export default function SgDashboard() {
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="font-display text-2xl font-semibold text-ink">
-            Welcome back, {user?.name?.split(" ")[0]}
+            {t("dashboard.welcomeBack", { name: user?.name?.split(" ")[0] })}
           </h1>
           <p className="text-sm text-ink-muted">
-            Final-stage overview across Club Licensing, Referee, Development, Competition, Legal, Marketing, HR, and Finance.
+            {t("dashboardHome.sgOverview")}
           </p>
         </div>
         <div className="flex gap-2">
           <Link to="/sg/approvals">
             <Button variant="ghost" className="gap-1.5 cursor-pointer">
-              <ClipboardList className="w-4 h-4" /> Review queue
+              <ClipboardList className="w-4 h-4" /> {t("dashboard.reviewQueue")}
             </Button>
           </Link>
           <Link to="/sg/admin">
-            <Button className="gap-1.5 cursor-pointer"><Users className="w-4 h-4 " /> Manage users</Button>
+            <Button className="gap-1.5 cursor-pointer"><Users className="w-4 h-4 " /> {t("dashboard.manageUsers")}</Button>
           </Link>
         </div>
       </div>
@@ -63,13 +65,13 @@ export default function SgDashboard() {
             <div className="w-9 h-9 rounded-lg bg-gold-soft flex items-center justify-center mb-3">
               <ShieldCheck className="w-4 h-4 text-gold" />
             </div>
-            <h3 className="font-display font-semibold text-ink mb-1.5">Audit trail</h3>
+            <h3 className="font-display font-semibold text-ink mb-1.5">{t("dashboardHome.auditTrailCardTitle")}</h3>
             <p className="text-sm text-ink-muted mb-4">
-              Every approval, rejection, and account change — timestamped and unalterable.
+              {t("dashboardHome.auditTrailCardDesc")}
             </p>
           </div>
           <Link to="/sg/audit-trail">
-            <Button variant="ghost" className="w-full cursor-pointer">View full trail</Button>
+            <Button variant="ghost" className="w-full cursor-pointer">{t("dashboardHome.viewFullTrail")}</Button>
           </Link>
         </GlassCard>
       </div>

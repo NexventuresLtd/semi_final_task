@@ -3,6 +3,7 @@ import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Boolean, DateTime, Enum as SAEnum
 from app.database import Base
+import enum
 
 
 class UserRole(str, enum.Enum):
@@ -28,6 +29,12 @@ class UserStatus(str, enum.Enum):
     ACTIVE = "active"
     DISABLED = "disabled"               # SG has revoked access
 
+class QualificationBadge(str, enum.Enum):
+    YOUTH_LOCAL = "youth_local"
+    SEMI_PRO = "semi_pro"
+    TOP_TIER_NATIONAL = "top_tier_national"
+    CAF = "caf"
+    FIFA = "fifa"
 
 def generate_uuid() -> str:
     return str(uuid.uuid4())
@@ -43,7 +50,9 @@ class User(Base):
 
     role = Column(SAEnum(UserRole), nullable=False)
     department = Column(SAEnum(Department), nullable=True)  # null for DAF/SG
-
+    is_department_head = Column(Boolean, nullable=False, default=False, server_default="false")
+    phone_number = Column(String, nullable=True)
+    qualification_badge = Column(SAEnum(QualificationBadge), nullable=True)
     status = Column(SAEnum(UserStatus), nullable=False, default=UserStatus.INVITED)
 
     # Auth

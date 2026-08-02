@@ -30,6 +30,7 @@ class UserOut(BaseModel):
     role: str
     department: str | None
     totp_enabled: bool
+    is_department_head: bool = False 
 
     class Config:
         from_attributes = True

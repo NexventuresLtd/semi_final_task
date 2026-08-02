@@ -24,7 +24,7 @@ export function useApprovalActions() {
       toast.success("Request approved — moved to the next stage");
       invalidate();
     },
-    onError: (err) => toast.error(err.response?.data?.message || "Could not approve request"),
+    onError: (err) => toast.error(err.response?.data?.detail || err.response?.data?.message || "Could not approve request"),
   });
 
   const reject = useMutation({
@@ -33,7 +33,7 @@ export function useApprovalActions() {
       toast.success("Request rejected — the accountant has been notified");
       invalidate();
     },
-    onError: (err) => toast.error(err.response?.data?.message || "Could not reject request"),
+    onError: (err) => toast.error(err.response?.data?.detail || err.response?.data?.message || "Could not reject request"),
   });
 
   return { approve, reject };

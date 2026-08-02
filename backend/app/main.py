@@ -1,9 +1,10 @@
 import threading
+import asyncio
 from fastapi import FastAPI
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import auth, admin, users, templates, requests, approvals, activity
+from app.routers import auth, admin, users, templates, requests, approvals, activity, referee, analytics
 from app.routers import notifications
 from app.routers import ws
 
@@ -38,7 +39,12 @@ def start_celery_worker():
 
 
 @app.on_event("startup")
-def on_startup():
+async def on_startup():
+    # Capture the running uvicorn event loop so sync route handlers can
+    # schedule WebSocket pushes onto it via run_coroutine_threadsafe.
+    from app.core import ws_loop
+    ws_loop.loop = asyncio.get_running_loop()
+
     logger.info(f"APP_ENV is: {settings.app_env}")
     if is_production:
         logger.info("Production mode — launching Celery worker thread")
@@ -61,3 +67,5 @@ app.include_router(approvals.router, prefix="/api")
 app.include_router(activity.router, prefix="/api")
 app.include_router(notifications.router, prefix="/api")
 app.include_router(ws.router, prefix="/api")
+app.include_router(referee.router, prefix="/api")
+app.include_router(analytics.router, prefix="/api")

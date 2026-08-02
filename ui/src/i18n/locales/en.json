@@ -123,7 +123,47 @@
     "errorPasswordsDontMatch": "Passwords do not match",
     "passwordUpdatedSuccess": "Password updated. Please sign in.",
     "errorResetLinkExpired": "This reset link has expired. Request a new one.",
-    "errorResetLinkInvalid": "Could not reset password. The link may be invalid."
+    "errorResetLinkInvalid": "Could not reset password. The link may be invalid.",
+    "signupTaglines": [
+      "Almost there.",
+      "One more step to get started."
+    ],
+    "signupWorkflowPoints": [
+      "Verify your email or Google account",
+      "Set up two-factor authentication",
+      "Capture your digital signature",
+      "Start submitting your first request"
+    ],
+    "securityLineVerified": "Verified invitation · Secure signup",
+    "verifyEmailTaglines": [
+      "Keeping your account secure."
+    ],
+    "verifyEmailWorkflowPoints": [
+      "Two-factor authentication protects every login",
+      "Only you can approve or submit on your behalf"
+    ],
+    "totpVerifyTaglines": [
+      "Almost there.",
+      "One last step.",
+      "Securing your session."
+    ],
+    "totpVerifyWorkflowPoints": [
+      "Open Google Authenticator on your phone",
+      "Enter the 6-digit code shown for FERWAFA",
+      "Codes refresh every 30 seconds",
+      "Everything protected behind two-factor authentication"
+    ],
+    "totpVerifySecurityLine": "Two-factor authentication · TOTP",
+    "forgotPasswordTaglines": [
+      "Locked out happens to everyone.",
+      "We'll get you back in, securely."
+    ],
+    "forgotPasswordWorkflowPoints": [
+      "Enter the email tied to your FERWAFA account",
+      "We'll send a one-time reset link if it exists",
+      "The link expires in 30 minutes for your security",
+      "Set a new password and sign back in"
+    ]
   },
 
   "landing": {
@@ -213,7 +253,9 @@
     "exportPdf": "Export PDF",
     "noMatchFilters": "No requests match your filters.",
     "showing": "Showing {{from}}–{{to}} of {{total}}",
-    "savePdf": "Save signed document as PDF"
+    "savePdf": "Save signed document as PDF",
+    "fieldCount_one": "{{count}} field",
+    "fieldCount_other": "{{count}} fields"
   },
   "approvals": {
     "yourDecision": "Your decision",
@@ -289,9 +331,12 @@
     "clearSignature": "Clear",
     "saveSignature": "Save signature",
     "currentSignatureOnFile": "Current signature on file",
-    "signatureHint": "Draw your signature above — it will be applied to every request you submit or approve."
+    "signatureHint": "Draw your signature above — it will be applied to every request you submit or approve.",
+    "signatureSavedSuccess": "Signature saved — it will be applied to future approvals",
+    "signatureSaveError": "Could not save signature"
   },
   "errors": {
+    "oops": "Oops!",
     "unauthorizedTitle": "Access restricted",
     "unauthorizedDesc": "Your role doesn't have permission to view this page. If you think this is a mistake, contact your Secretary General.",
     "notFoundDesc": "This page doesn't exist, or you don't have a bookmark worth keeping.",

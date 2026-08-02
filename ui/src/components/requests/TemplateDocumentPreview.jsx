@@ -17,7 +17,7 @@ const TemplateDocumentPreview = forwardRef(function TemplateDocumentPreview(
         <img src={logo} alt="FERWAFA" className="w-14 h-14 object-contain" />
         <div>
           <p className="font-display font-bold text-ink text-lg">FERWAFA</p>
-          <p className="text-xs text-ink-muted uppercase tracking-wide">Rwanda Football Federation — Finance Department</p>
+          <p className="text-xs text-ink-muted uppercase tracking-wide">Rwanda Football Federation — All Departments</p>
         </div>
       </div>
 

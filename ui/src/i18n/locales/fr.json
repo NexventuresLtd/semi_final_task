@@ -122,7 +122,47 @@
     "errorPasswordsDontMatch": "Les mots de passe ne correspondent pas",
     "passwordUpdatedSuccess": "Mot de passe mis à jour. Veuillez vous connecter.",
     "errorResetLinkExpired": "Ce lien de réinitialisation a expiré. Demandez-en un nouveau.",
-    "errorResetLinkInvalid": "Impossible de réinitialiser le mot de passe. Le lien est peut-être invalide."
+    "errorResetLinkInvalid": "Impossible de réinitialiser le mot de passe. Le lien est peut-être invalide.",
+    "signupTaglines": [
+      "Presque là.",
+      "Encore une étape pour commencer."
+    ],
+    "signupWorkflowPoints": [
+      "Vérifiez votre e-mail ou compte Google",
+      "Configurez l'authentification à deux facteurs",
+      "Capturez votre signature numérique",
+      "Commencez à soumettre votre première demande"
+    ],
+    "securityLineVerified": "Invitation vérifiée · Inscription sécurisée",
+    "verifyEmailTaglines": [
+      "Sécurisez votre compte."
+    ],
+    "verifyEmailWorkflowPoints": [
+      "L'authentification à deux facteurs protège chaque connexion",
+      "Vous seul pouvez approuver ou soumettre en votre nom"
+    ],
+    "totpVerifyTaglines": [
+      "Presque là.",
+      "Une dernière étape.",
+      "Sécurisation de votre session."
+    ],
+    "totpVerifyWorkflowPoints": [
+      "Ouvrez Google Authenticator sur votre téléphone",
+      "Entrez le code à 6 chiffres affiché pour FERWAFA",
+      "Les codes se rafraîchissent toutes les 30 secondes",
+      "Tout est protégé par l'authentification à deux facteurs"
+    ],
+    "totpVerifySecurityLine": "Authentification à deux facteurs · TOTP",
+    "forgotPasswordTaglines": [
+      "Être bloqué arrive à tout le monde.",
+      "Nous vous ferons revenir, en toute sécurité."
+    ],
+    "forgotPasswordWorkflowPoints": [
+      "Entrez l'e-mail lié à votre compte FERWAFA",
+      "Nous enverrons un lien de réinitialisation unique s'il existe",
+      "Le lien expire dans 30 minutes pour votre sécurité",
+      "Définissez un nouveau mot de passe et reconnectez-vous"
+    ]
   },
 
   "landing": {
@@ -211,7 +251,9 @@
     "exportPdf": "Exporter en PDF",
     "noMatchFilters": "Aucune demande ne correspond à vos filtres.",
     "showing": "Affichage de {{from}}–{{to}} sur {{total}}",
-    "savePdf": "Enregistrer le document signé en PDF"
+    "savePdf": "Enregistrer le document signé en PDF",
+    "fieldCount_one": "{{count}} champ",
+    "fieldCount_other": "{{count}} champs"
   },
   "approvals": {
     "yourDecision": "Votre décision",
@@ -287,9 +329,12 @@
     "clearSignature": "Effacer",
     "saveSignature": "Enregistrer la signature",
     "currentSignatureOnFile": "Signature actuelle enregistrée",
-    "signatureHint": "Dessinez votre signature ci-dessus — elle sera appliquée à chaque demande que vous soumettez ou approuvez."
+    "signatureHint": "Dessinez votre signature ci-dessus — elle sera appliquée à chaque demande que vous soumettez ou approuvez.",
+    "signatureSavedSuccess": "Signature enregistrée — elle sera appliquée aux futures approbations",
+    "signatureSaveError": "Impossible d'enregistrer la signature"
   },
   "errors": {
+    "oops": "Oups !",
     "unauthorizedTitle": "Accès restreint",
     "unauthorizedDesc": "Votre rôle ne vous permet pas d'accéder à cette page. Si vous pensez qu'il s'agit d'une erreur, contactez votre Secrétaire Général.",
     "notFoundDesc": "Cette page n'existe pas, ou vous n'avez pas un favori qui vaille la peine d'être gardé.",

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { FileStack } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useTemplates } from "../../hooks/useTemplates";
 import TemplateFillForm from "../../components/requests/TemplateFillForm";
 import GlassCard from "../../components/ui/GlassCard";
 
 export default function NewRequestPage() {
+  const { t } = useTranslation();
   const { state } = useLocation();
   const { data: templates, isLoading } = useTemplates();
   const [selected, setSelected] = useState(null);
@@ -19,9 +21,9 @@ export default function NewRequestPage() {
 
       {!activeTemplate ? (
         <>
-          <h1 className="font-display text-2xl font-semibold text-ink dark:text-ink-dark mb-1">Choose a template</h1>
+          <h1 className="font-display text-2xl font-semibold text-ink dark:text-ink-dark mb-1">{t("requests.chooseTemplate")}</h1>
           <p className="text-sm text-ink-muted dark:text-ink-muted-dark mb-6">
-            Pick the saved template that matches your request.
+            {t("requests.chooseTemplateSubtitle")}
           </p>
           {isLoading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -36,14 +38,14 @@ export default function NewRequestPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-ink dark:text-ink-dark">{tpl.name}</p>
-                    <p className="text-xs text-ink-muted dark:text-ink-muted-dark">{tpl.fields?.length || 0} fields</p>
+                    <p className="text-xs text-ink-muted dark:text-ink-muted-dark">{t("requests.fieldCount", { count: tpl.fields?.length || 0 })}</p>
                   </div>
                 </GlassCard>
               ))}
             </div>
           ) : (
             <GlassCard className="text-center py-10">
-              <p className="text-ink-muted dark:text-ink-muted-dark">No templates yet — create one under Templates first.</p>
+              <p className="text-ink-muted dark:text-ink-muted-dark">{t("requests.noTemplatesYet")}</p>
             </GlassCard>
           )}
         </>

@@ -13,13 +13,12 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 def _to_profile_out(user: User) -> ProfileOut:
     return ProfileOut(
-        id=user.id,
-        email=user.email,
-        name=user.name,
-        role=user.role,
-        department=user.department,
-        totp_enabled=user.totp_enabled,
+        id=user.id, email=user.email, name=user.name, role=user.role,
+        department=user.department, totp_enabled=user.totp_enabled,
         signature_image=decrypt_field(user.signature_image_encrypted),
+        is_department_head=user.is_department_head,
+        phone_number=user.phone_number,
+        qualification_badge=user.qualification_badge,
     )
 
 
@@ -29,19 +28,15 @@ def get_my_profile(user: User = Depends(get_current_user)):
 
 
 @router.patch("/me")
-def update_my_profile(
-    payload: UpdateProfileRequest,
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
+def update_my_profile(payload: UpdateProfileRequest, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     if payload.name is not None:
         user.name = payload.name.strip()
-
     if payload.signature_image is not None:
-        # Signature images are encrypted at rest, same as any other
-        # sensitive field — decrypted only when actually rendering a
-        # document or returning it to its owner.
         user.signature_image_encrypted = encrypt_field(payload.signature_image)
+    if payload.phone_number is not None:
+        user.phone_number = payload.phone_number.strip()
+    if payload.qualification_badge is not None:
+        user.qualification_badge = payload.qualification_badge
 
     db.commit()
     db.refresh(user)

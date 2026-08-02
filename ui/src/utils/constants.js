@@ -25,4 +25,15 @@ export const TEMPLATE_FIELD_TYPES = [
   { value: "date", label: "Date" },
 ];
 
+export const QUALIFICATION_BADGES = [
+  { value: "youth_local", label: "Youth / Local Badge", level: 1 },
+  { value: "semi_pro", label: "Semi-Pro Badge", level: 2 },
+  { value: "top_tier_national", label: "Top-Tier National Badge", level: 3 },
+  { value: "caf", label: "CAF Badge", level: 4 },
+  { value: "fifa", label: "FIFA Badge", level: 5 },
+];
+
 export const DEPARTMENT_LABEL = Object.fromEntries(DEPARTMENTS.map((d) => [d.value, d.label]));
+export const REFEREE_ROLES = ["Center Referee", "Assistant Referee 1", "Assistant Referee 2", "Fourth Official", "VAR"];
+export const QUALIFICATION_BADGE_LABEL = Object.fromEntries(QUALIFICATION_BADGES.map((b) => [b.value, b.label]));
+export const DEPARTMENT_CHART_LABEL = Object.fromEntries(DEPARTMENTS.map((d) => [d.value, d.label]));

@@ -123,7 +123,47 @@
     "errorPasswordsDontMatch": "Amagambo y'ibanga ntahuye",
     "passwordUpdatedSuccess": "Ijambo ry'ibanga ryahinduwe. Nyamuneka winjire.",
     "errorResetLinkExpired": "Iri huza ryo guhindura ryarangiye. Saba irindi.",
-    "errorResetLinkInvalid": "Ntibishoboka guhindura ijambo ry'ibanga. Ihuza rishobora kuba ridakora."
+    "errorResetLinkInvalid": "Ntibishoboka guhindura ijambo ry'ibanga. Ihuza rishobora kuba ridakora.",
+    "signupTaglines": [
+      "Hafi cyane.",
+      "Intambwe imwe isigaye ngo utangire."
+    ],
+    "signupWorkflowPoints": [
+      "Emeza imeyili yawe cyangwa konti ya Google",
+      "Tegura uburyo bwo kwemeza kabiri",
+      "Fata umukono wawe w'ikoranabuhanga",
+      "Tangira gutanga icyifuzo cyawe cya mbere"
+    ],
+    "securityLineVerified": "Ubutumire bwemejwe · Kwiyandikisha kugaragara",
+    "verifyEmailTaglines": [
+      "Kurinda konti yawe umutekano."
+    ],
+    "verifyEmailWorkflowPoints": [
+      "Uburyo bwo kwemeza kabiri burinda buri kwinjira",
+      "Ni wowe wenyine ushobora kwemeza cyangwa gutanga mu izina ryawe"
+    ],
+    "totpVerifyTaglines": [
+      "Hafi cyane.",
+      "Intambwe ya nyuma.",
+      "Kurinda umutekano w'igihe cyawe."
+    ],
+    "totpVerifyWorkflowPoints": [
+      "Fungura Google Authenticator kuri telefoni yawe",
+      "Injiza umubare w'ibendera 6 wa FERWAFA",
+      "Amakoodi yivugurura buri masegonda 30",
+      "Byose birindwa n'uburyo bwo kwemeza kabiri"
+    ],
+    "totpVerifySecurityLine": "Uburyo bwo kwemeza kabiri · TOTP",
+    "forgotPasswordTaglines": [
+      "Gufungwa bibaho kuri buri wese.",
+      "Tuzagusubiza imbere, mu mutekano."
+    ],
+    "forgotPasswordWorkflowPoints": [
+      "Injiza imeyili ihuje na konti yawe ya FERWAFA",
+      "Tuzohereza ihuza rimwe ryo guhindura niba ihari",
+      "Ihuza rirangira mu minota 30 kubera umutekano wawe",
+      "Shyiraho ijambo ry'ibanga rishya hanyuma winjire"
+    ]
   },
 
 
@@ -213,7 +253,9 @@
     "exportPdf": "Kura muri PDF",
     "noMatchFilters": "Nta cyifuzo gihuye na muyunguruzi yawe.",
     "showing": "Kwerekana {{from}}–{{to}} kuri {{total}}",
-    "savePdf": "Bika inyandiko yashyizweho umukono muri PDF"
+    "savePdf": "Bika inyandiko yashyizweho umukono muri PDF",
+    "fieldCount_one": "ikibazo {{count}}",
+    "fieldCount_other": "ibibazo {{count}}"
   },
   "approvals": {
     "yourDecision": "Icyemezo cyawe",
@@ -289,9 +331,12 @@
     "clearSignature": "Siba",
     "saveSignature": "Bika umukono",
     "currentSignatureOnFile": "Umukono uriho ubu",
-    "signatureHint": "Andika umukono wawe hejuru — uzashyirwa kuri buri cyifuzo wohereza cyangwa wemeza."
+    "signatureHint": "Shushanya umukono wawe hejuru — uzashyirwa kuri buri cyifuzo utanze cyangwa wemeje.",
+    "signatureSavedSuccess": "Umukono wabitswe — uzashyirwa ku byemezo by'imbere",
+    "signatureSaveError": "Ntibishoboka kubika umukono"
   },
   "errors": {
+    "oops": "Oya!",
     "unauthorizedTitle": "Kwinjira birabujijwe",
     "unauthorizedDesc": "Uruhare rwawe ntirwemerewe kureba iyi paji. Niba ubona ko ari ikosa, vugana na Umunyamabanga Mukuru.",
     "notFoundDesc": "Iyi paji ntibaho, cyangwa nta cyapa ufite gikwiye kubikwa.",

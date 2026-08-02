@@ -13,6 +13,7 @@ from app.tasks.email_tasks import send_email_task
 from app.models.audit_log import AuditLog
 from app.models.session import LoginSession
 from app.schemas.admin import UserListItem, UpdateUserStatusRequest, AuditLogEntry, SessionEntry
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -145,3 +146,31 @@ def get_audit_trail(sg: User = Depends(require_role("sg")), db: Session = Depend
         )
         for log in logs
     ]
+
+
+class UpdateDepartmentHeadRequest(BaseModel):
+    is_department_head: bool
+
+@router.patch("/users/{user_id}/department-head")
+def update_department_head(
+    user_id: str,
+    payload: UpdateDepartmentHeadRequest,
+    sg: User = Depends(require_role("sg")),
+    db: Session = Depends(get_db),
+):
+    target = db.query(User).filter(User.id == user_id).first()
+    if target is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
+    if target.department != "referee":
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Only referee department staff can be made department head")
+
+    target.is_department_head = payload.is_department_head
+    db.commit()
+
+    db.add(AuditLog(
+        action="department_head_changed",
+        actor_id=sg.id, actor_name=sg.name,
+        description=f"{'granted' if payload.is_department_head else 'removed'} Department Head access for {target.name}",
+    ))
+    db.commit()
+    return {"message": "Updated"}

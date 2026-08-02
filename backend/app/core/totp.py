@@ -1,6 +1,5 @@
 import pyotp
 
-
 def generate_totp_secret() -> str:
     return pyotp.random_base32()
 

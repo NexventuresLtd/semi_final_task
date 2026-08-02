@@ -27,6 +27,8 @@ import TemplatesPage from "../pages/staff/TemplatesPage";
 import DafDashboard from "../pages/daf/DafDashboard";
 import DafApprovalQueuePage from "../pages/daf/DafApprovalQueuePage";
 
+import AnalyticsDashboardPage from "../pages/AnalyticsDashboardPage";
+
 import SgDashboard from "../pages/sg/SgDashboard";
 import SgApprovalQueuePage from "../pages/sg/SgApprovalQueuePage";
 import AdminPanelPage from "../pages/sg/AdminPanelPage";
@@ -37,6 +39,10 @@ import UnauthorizedPage from "../pages/UnauthorizedPage";
 
 import ProfilePage from "../pages/ProfilePage";
 import SettingsPage from "../pages/SettingsPage";
+
+import AssignmentCalendarPage from "../pages/staff/referee/AssignmentCalendarPage";
+import GradingPage from "../pages/staff/referee/GradingPage";
+import RefereeRosterPage from "../pages/staff/referee/RefereeRosterPage";
 
 export default function AppRoutes() {
   return (
@@ -60,12 +66,18 @@ export default function AppRoutes() {
         <Route element={<DashboardShell />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route element={<RoleRoute allowed={["sg", "daf"]} />}>
+                <Route path="/analytics" element={<AnalyticsDashboardPage />} />
+            </Route>
           {/* staff */}
           <Route element={<RoleRoute allowed={["staff"]} />}>
             <Route path="/staff" element={<StaffDashboard />} />
             <Route path="/staff/new-request" element={<NewRequestPage />} />
             <Route path="/staff/my-requests" element={<MyRequestsPage />} />
             <Route path="/staff/templates" element={<TemplatesPage />} />
+            <Route path="/staff/referee/calendar" element={<AssignmentCalendarPage />} />
+            <Route path="/staff/referee/grading" element={<GradingPage />} />
+            <Route path="/staff/referee/roster" element={<RefereeRosterPage />} />
           </Route>
 
           {/* DAF */}

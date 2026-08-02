@@ -1,17 +1,15 @@
+import { useTranslation } from "react-i18next";
 import SignupMethodChoice from "../../components/auth/SignupMethodChoice";
 import AuthLayout from "../../components/layout/AuthLayout";
 
 export default function SignupPage() {
+  const { t } = useTranslation();
+
   return (
     <AuthLayout
-        taglines={["Almost there.", "One more step to get started."]}
-        workflowPoints={[
-          "Verify your email or Google account",
-          "Set up two-factor authentication",
-          "Capture your digital signature",
-          "Start submitting your first request",
-        ]}
-        securityLine="Verified invitation · Secure signup"
+        taglines={t("auth.signupTaglines", { returnObjects: true })}
+        workflowPoints={t("auth.signupWorkflowPoints", { returnObjects: true })}
+        securityLine={t("auth.securityLineVerified")}
       >
         <SignupMethodChoice />
       </AuthLayout>

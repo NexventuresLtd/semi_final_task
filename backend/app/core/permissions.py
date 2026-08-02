@@ -47,3 +47,17 @@ def require_role(*allowed_roles: str):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Insufficient permissions")
         return user
     return checker
+
+
+def require_department_head(department: str):
+    """
+    Usage: Depends(require_department_head("referee"))
+    Only lets through staff who are BOTH in the given department AND
+    flagged as its head — a regular referee-department staff member
+    (submitting their own requests) does not get this access.
+    """
+    def checker(user: User = Depends(get_current_user)) -> User:
+        if user.role != "staff" or user.department != department or not user.is_department_head:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "You don't have access to this department's management tools")
+        return user
+    return checker

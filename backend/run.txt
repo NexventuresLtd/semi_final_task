@@ -1,3 +1,12 @@
 docker run -d --name ferwafa-redis -p 6379:6379 redis:alpine
 
 celery -A app.tasks.celery_app.celery_app worker --loglevel=info -P solo
+
+____________________________________________________
+Render Database url
+postgresql://ferwafa_db_user:iNEvmWa4w0wM9vJmbQ9sLTX6vNqYn0Mg@dpg-d9kvu3lg1s2s73fs76o0-a/ferwafa_db
+
+____________________________________________________
+Render redis url
+
+redis://red-d9l01m5g1s2s73fscb6g:6379

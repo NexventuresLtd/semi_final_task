@@ -1,11 +1,13 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, FilePlus2, ListChecks, FileStack, Users, ShieldCheck, ClipboardList, User } from "lucide-react";
+import { LayoutDashboard, FilePlus2, ListChecks, FileStack, Users, ShieldCheck, ClipboardList, User, CalendarDays, BarChart3 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from "react-i18next";
 
 export default function TabBar() {
   const { t } = useTranslation();
   const role = useAuthStore((s) => s.user?.role);
+  const isRefereeHead = role === "staff" && useAuthStore.getState().user?.department === "referee" && useAuthStore.getState().user?.is_department_head;
+
   const NAV_BY_ROLE = {
   staff: [
     { to: "/staff", label: t("common.home"), icon: LayoutDashboard, end: true },
@@ -13,18 +15,24 @@ export default function TabBar() {
     { to: "/staff/my-requests", label: t("common.myRequestsNav"), icon: ListChecks },
     { to: "/staff/templates", label: t("common.templatesNav"), icon: FileStack },
   ],
+
   daf: [
     { to: "/daf", label: t("common.home"), icon: LayoutDashboard, end: true },
     { to: "/daf/approvals", label: t("common.approvalQueueNav"), icon: ClipboardList },
+    { to: "/analytics", label: "Analytics", icon: BarChart3 },
   ],
+
   sg: [
     { to: "/sg", label: t("common.home"), icon: LayoutDashboard, end: true },
     { to: "/sg/approvals", label: t("common.approvalQueueNav"), icon: ClipboardList },
     { to: "/sg/admin", label: t("common.manageUsersNav"), icon: Users },
     { to: "/sg/audit-trail", label: t("common.auditTrailNav"), icon: ShieldCheck },
+    { to: "/analytics", label: "Analytics", icon: BarChart3 },
   ],
 };
-  const links = [...(NAV_BY_ROLE[role] || []), { to: "/profile", label: "Profile", icon: User }];
+  const links = [...(NAV_BY_ROLE[role] || []),
+                 ...(isRefereeHead ? [{ to: "/staff/referee/calendar", label: "Calendar", icon: CalendarDays }] : []),
+                 { to: "/profile", label: "Profile", icon: User }];
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 px-3 pb-3">

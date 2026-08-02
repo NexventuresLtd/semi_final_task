@@ -115,11 +115,20 @@ def _handle_decision(
     db.refresh(request)
 
     requester = db.query(User).filter(User.id == request.requester_id).first()
+    # Always notify the requester (staff) of the decision
     notify_decision(db, requester, decision, STAGE_LABEL[stage], request.title, request.id, payload.comment)
+
     if decision == "approved" and stage == "daf":
+        # DAF approved a financial request — SG is now in the loop, notify all SG users
         sg_users = db.query(User).filter(User.role == "sg", User.status == "active").all()
-    for sg_user in sg_users:
-        notify_new_request(db, sg_user, request.title, requester, request.id)
+        for sg_user in sg_users:
+            notify_new_request(db, sg_user, request.title, requester, request.id)
+
+    if stage == "sg":
+        # SG made the final call — also notify all DAF users of the outcome
+        daf_users = db.query(User).filter(User.role == "daf", User.status == "active").all()
+        for daf_user in daf_users:
+            notify_decision(db, daf_user, decision, STAGE_LABEL[stage], request.title, request.id, payload.comment)
 
     db.commit()
 

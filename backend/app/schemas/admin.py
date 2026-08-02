@@ -9,7 +9,8 @@ class UserListItem(BaseModel):
     role: str
     department: str | None
     status: str
-
+    is_department_head: bool
+    
     class Config:
         from_attributes = True
 

@@ -5,7 +5,7 @@ from sqlalchemy import pool
 from app.config import settings
 from alembic import context
 from app.database import Base
-from app.models import user, invite, template, request, comment, audit_log, session, notification  # noqa
+from app.models import user, invite, template, request, comment, audit_log, session, notification, referee  # noqa
 
 target_metadata = Base.metadata
 

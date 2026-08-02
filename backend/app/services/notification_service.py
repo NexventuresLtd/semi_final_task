@@ -32,7 +32,7 @@ def notify_new_request(db: Session, approver: User, request_title: str, requeste
         request_id=request_id,
     )
     db.add(notif)
-    _push(notif)
+    push(notif)
 
     send_email_task.delay(
         to_email=approver.email,
@@ -50,7 +50,7 @@ def notify_decision(db: Session, requester: User, decision: str, stage_label: st
         request_id=request_id,
     )
     db.add(notif)
-    _push(notif)
+    push(notif)
 
     send_email_task.delay(
         to_email=requester.email,
@@ -58,21 +58,30 @@ def notify_decision(db: Session, requester: User, decision: str, stage_label: st
         html_body=approval_notification_html(request_title, decision, stage_label, comment),
     )
 
-def _push(notif):
-    """Fire-and-forget push over the WebSocket, if the user has one open.
-    Uses create_task since notify_* functions are called from sync FastAPI
-    route handlers, not async ones — this schedules the push without
-    blocking the request."""
-    try:
-        loop = asyncio.get_event_loop()
-        loop.create_task(manager.push_to_user(notif.user_id, {
-            "type": notif.type,
-            "title": notif.title,
-            "message": notif.message,
-            "requestId": notif.request_id,
-        }))
-    except RuntimeError:
-        # No running event loop in this context (e.g. called from a sync
-        # thread) — safe to skip; the notification still saved to the DB
-        # and will show up on next poll/page load either way.
-        pass
+def push(notif):
+    """Fire-and-forget WebSocket push from a sync or async route handler.
+
+    Sync FastAPI handlers run in a threadpool — asyncio.get_event_loop() there
+    returns a different (often already-closed) loop. Instead we grab the uvicorn
+    event loop stored at startup in ws_loop.loop and use run_coroutine_threadsafe,
+    which is the only safe way to schedule a coroutine from a foreign thread.
+    """
+    from app.core import ws_loop
+
+    payload = {
+        "id": str(notif.id) if notif.id else None,
+        "type": notif.type,
+        "title": notif.title,
+        "message": notif.message,
+        "requestId": notif.request_id,
+    }
+
+    loop = ws_loop.loop
+    if loop is None or not loop.is_running():
+        # Startup hasn't finished or server is shutting down — skip push.
+        # The notification is already in the DB and will appear on next poll.
+        return
+
+    asyncio.run_coroutine_threadsafe(
+        manager.push_to_user(notif.user_id, payload), loop
+    )

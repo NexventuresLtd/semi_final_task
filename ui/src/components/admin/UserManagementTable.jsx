@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShieldOff, ShieldCheck, KeyRound } from "lucide-react";
+import { ShieldOff, ShieldCheck, KeyRound, Star } from "lucide-react";
 import GlassCard from "../ui/GlassCard";
 import Button from "../ui/Button";
 import DisableUserModal from "./DisableUserModal";
@@ -7,6 +7,8 @@ import DepartmentBadge from "../requests/DepartmentBadge";
 import { useUsers, useToggleUserStatus } from "../../hooks/useAdmin";
 import { adminService } from "../../services/adminService";
 import toast from "react-hot-toast";
+import axiosInstance from "../../services/axiosInstance";
+import { useQueryClient } from "@tanstack/react-query";
 
 const STATUS_STYLES = {
   active: "bg-green-soft text-green",
@@ -18,6 +20,17 @@ export default function UserManagementTable() {
   const { data: users, isLoading } = useUsers();
   const toggleStatus = useToggleUserStatus();
   const [confirmingDisable, setConfirmingDisable] = useState(null);
+  const queryClient = useQueryClient();
+
+  const handleToggleHead = async (u) => {
+    try {
+      await axiosInstance.patch(`/admin/users/${u.id}/department-head`, { is_department_head: !u.is_department_head });
+      toast.success(u.is_department_head ? "Department Head access removed" : "Granted Department Head access");
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Could not update access");
+    }
+  };
 
   const handleResetTotp = async (userId) => {
     try {
@@ -84,6 +97,16 @@ export default function UserManagementTable() {
                     </button>
                   )}
                 </div>
+
+                {u.department === "referee" && u.role === "staff" && (
+                  <button
+                    onClick={() => handleToggleHead(u)}
+                    title={u.is_department_head ? "Remove Department Head" : "Make Department Head"}
+                    className={`p-2 rounded-lg ${u.is_department_head ? "bg-gold-soft hover:bg-gold-soft" : "hover:bg-surface-light dark:hover:bg-glass-dark"}`}
+                  >
+                    <Star className={`w-4 h-4 ${u.is_department_head ? "text-gold fill-gold" : "text-ink-muted dark:text-ink-muted-dark"}`} />
+                  </button>
+                )}
               </td>
             </tr>
           ))}

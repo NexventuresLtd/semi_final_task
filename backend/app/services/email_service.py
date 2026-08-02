@@ -3,11 +3,11 @@ import aiosmtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+from email.utils import make_msgid
 from app.config import settings
 
 # backend/images/ferwafa-logo.png — adjust if you placed it elsewhere
 LOGO_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "images", "ferwafa-logo.png")
-LOGO_CID = "ferwafa-logo"
 
 BLUE = "#0F6FA8"
 INK = "#12151B"
@@ -23,6 +23,7 @@ async def send_email(to_email: str, subject: str, html_body: str):
     message["Subject"] = subject
 
     alt_part = MIMEMultipart("alternative")
+    alt_part.attach(MIMEText("Please view this email in an HTML-compatible email client.", "plain"))
     alt_part.attach(MIMEText(html_body, "html"))
     message.attach(alt_part)
 
@@ -31,9 +32,13 @@ async def send_email(to_email: str, subject: str, html_body: str):
     # via cid:ferwafa-logo rather than a hosted URL.
     if os.path.exists(LOGO_PATH):
         with open(LOGO_PATH, "rb") as f:
-            logo = MIMEImage(f.read())
-        logo.add_header("Content-ID", f"<{LOGO_CID}>")
-        logo.add_header("Content-Disposition", "inline", filename="ferwafa-logo.png")
+            logo = MIMEImage(f.read(), _subtype="png")
+        
+        # Use a unique Message-ID format for the CID
+        # Extract the cid from HTML to match. We used the global placeholder below.
+        logo_cid_value = "logo@ferwafa.rw"
+        logo.add_header("Content-ID", f"<{logo_cid_value}>")
+        logo.add_header("Content-Disposition", "inline")
         message.attach(logo)
 
     await aiosmtplib.send(
@@ -48,12 +53,13 @@ async def send_email(to_email: str, subject: str, html_body: str):
 
 def _email_shell(inner_html: str) -> str:
     """Shared wrapper — header with logo, consistent footer, on every email."""
+    logo_cid = "logo@ferwafa.rw"
     return f"""
     <div style="background:{SURFACE}; padding:32px 16px; font-family:'Helvetica Neue', Arial, sans-serif;">
       <div style="max-width:480px; margin:0 auto; background:#ffffff; border:1px solid {BORDER}; border-radius:16px; overflow:hidden;">
 
         <div style="background:{INK}; padding:28px 32px; text-align:center;">
-          <img src="cid:{LOGO_CID}" alt="FERWAFA" width="52" height="52" style="display:inline-block; margin-bottom:10px;" />
+          <img src="cid:{logo_cid}" alt="FERWAFA" width="52" height="52" style="display:inline-block; margin-bottom:10px;" />
           <p style="margin:0; color:#ffffff; font-size:13px; letter-spacing:1px; font-weight:600; text-transform:uppercase;">
             FERWAFA · Departments Approvals
           </p>
