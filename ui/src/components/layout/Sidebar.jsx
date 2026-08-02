@@ -63,7 +63,7 @@ export default function Sidebar() {
   );
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 shrink-0 h-screen sticky top-0 p-4">
+    <aside className="hidden lg:flex flex-col w-64 shrink-0 h-full p-4">
       <div className="glass-panel flex-1 flex flex-col p-4 min-h-0">
         {/* Fixed header — never scrolls */}
         <div className="flex items-center gap-2.5 px-2 mb-6 pb-4 border-b border-glass-border-light dark:border-glass-border-dark shrink-0">

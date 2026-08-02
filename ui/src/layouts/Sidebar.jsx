@@ -30,8 +30,8 @@ export default function Sidebar() {
   const links = NAV_BY_ROLE[role] || [];
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 shrink-0 h-screen sticky top-0 p-4">
-      <div className="glass-panel flex-1 flex flex-col p-4">
+    <aside className="hidden lg:flex flex-col w-64 shrink-0 h-full p-4">
+      <div className="glass-panel flex-1 flex flex-col p-4 overflow-y-auto">
         <div className="flex items-center gap-2 px-2 mb-8">
           <div className="w-9 h-9 rounded-xl bg-emerald flex items-center justify-center font-display font-bold text-white">
             F
