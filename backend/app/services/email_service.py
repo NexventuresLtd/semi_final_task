@@ -41,13 +41,18 @@ async def send_email(to_email: str, subject: str, html_body: str):
         logo.add_header("Content-Disposition", "inline")
         message.attach(logo)
 
+    is_ssl = settings.email_smtp_port == 465
+    is_starttls = settings.email_smtp_port == 587 or settings.email_smtp_port == 25
+
     await aiosmtplib.send(
         message,
         hostname=settings.email_smtp_server,
         port=settings.email_smtp_port,
         username=settings.email_login,
         password=settings.email_sender_password,
-        start_tls=True,
+        use_tls=is_ssl,
+        start_tls=is_starttls,
+        timeout=30, # Increase timeout slightly to handle slow cloud connections
     )
 
 
