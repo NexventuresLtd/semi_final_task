@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class StatusBreakdownItem(BaseModel):
@@ -32,3 +33,22 @@ class AnalyticsOverview(BaseModel):
     totalApproved: int
     totalRejected: int
     totalPending: int
+
+
+class DepartmentDayData(BaseModel):
+    day: int  # 0=Monday, 6=Sunday
+    count: int
+
+
+class DepartmentWeeklyData(BaseModel):
+    department: str
+    days: list[DepartmentDayData]
+    total: int
+    percentage: float
+
+
+class DepartmentRequestsResponse(BaseModel):
+    weekStart: str
+    weekEnd: str
+    departments: list[DepartmentWeeklyData]
+    totalRequests: int
