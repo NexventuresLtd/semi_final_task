@@ -1,20 +1,27 @@
 import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import RequestsTable from "../requests/RequestsTable";
 import RequestDetailModal from "../requests/RequestDetailModal";
 import axiosInstance from "../../services/axiosInstance";
 
-const TABS = [
-  { key: "all", label: "All requests" },
-  { key: "approved", label: "Approved" },
-  { key: "pending_seen", label: "Not approved but seen" },
-  { key: "new", label: "New" },
+const TAB_KEYS = [
+  { key: "all", translationKey: "tabAll" },
+  { key: "approved", translationKey: "tabApproved" },
+  { key: "pending_seen", translationKey: "tabPendingSeen" },
+  { key: "new", translationKey: "tabNew" },
 ];
 
 export default function ApprovalQueue({ requests, onApprove, onReject, isSubmitting }) {
   const { state } = useLocation();
+  const { t } = useTranslation();
   const [tab, setTab] = useState(state?.filter || "all");
   const [selected, setSelected] = useState(null);
+
+  const tabs = useMemo(() => TAB_KEYS.map(tabKey => ({
+    key: tabKey.key,
+    label: t(`approvals.${tabKey.translationKey}`)
+  })), [t]);
 
   useEffect(() => {
     if (state?.openRequestId && requests?.length) {
@@ -46,7 +53,7 @@ export default function ApprovalQueue({ requests, onApprove, onReject, isSubmitt
   return (
     <div>
       <div className="flex items-center gap-1.5 overflow-x-auto pb-4">
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}

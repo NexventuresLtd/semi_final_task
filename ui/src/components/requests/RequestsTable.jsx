@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Search, Download, ChevronLeft, ChevronRight, CalendarRange, SlidersHorizontal, X } from "lucide-react";
 import GlassCard from "../ui/GlassCard";
 import Button from "../ui/Button";
@@ -10,6 +11,7 @@ import { REQUEST_TYPES } from "../../utils/constants";
 const PAGE_SIZE = 8;
 
 export default function RequestsTable({ requests = [], loading, onSelect, showDepartmentColumn = true }) {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -81,7 +83,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              placeholder="Search requests by title…"
+              placeholder={t("requests.searchPlaceholder")}
               className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-glass-border-light dark:border-glass-border-dark bg-transparent text-ink dark:text-ink-dark outline-none focus:border-blue transition-colors"
             />
           </div>
@@ -93,17 +95,17 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
-            Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
+            {t("requests.filters")} {activeFilterCount > 0 && `(${activeFilterCount})`}
           </button>
 
           <Button variant="ghost" size="sm" onClick={exportPdf} className="gap-1.5 cursor-pointer">
-            <Download className="w-4 h-4" /> Export PDF
+            <Download className="w-4 h-4" /> {t("requests.exportPdf")}
           </Button>
         </div>
 
         {/* Type tabs — navigation between request types */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-          {[{ value: "all", label: "All types" }, ...REQUEST_TYPES].map((t) => (
+          {[{ value: "all", label: t("table.allTypes") }, ...REQUEST_TYPES].map((t) => (
             <button
               key={t.value}
               onClick={() => { setTypeFilter(t.value); setPage(1); }}
@@ -129,22 +131,22 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
             >
               <div className="flex flex-wrap items-end gap-3 pt-1">
                 <div>
-                  <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark mb-1 block">Status</label>
+                  <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark mb-1 block">{t("requests.status")}</label>
                   <select
                     value={statusFilter}
                     onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
                     className="rounded-lg border border-glass-border-light dark:border-glass-border-dark px-3 py-1.5 text-sm bg-transparent text-ink dark:text-ink-dark outline-none focus:border-blue"
                   >
-                    <option value="all">All statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="all">{t("table.allStatuses")}</option>
+                    <option value="pending">{t("table.statusPending")}</option>
+                    <option value="approved">{t("table.statusApproved")}</option>
+                    <option value="rejected">{t("table.statusRejected")}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark mb-1 flex items-center gap-1">
-                    <CalendarRange className="w-3 h-3" /> From
+                    <CalendarRange className="w-3 h-3" /> {t("table.from")}
                   </label>
                   <input
                     type="date"
@@ -155,7 +157,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark mb-1 block">To</label>
+                  <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark mb-1 block">{t("table.to")}</label>
                   <input
                     type="date"
                     value={dateTo}
@@ -166,7 +168,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
 
                 {activeFilterCount > 0 && (
                   <button onClick={clearFilters} className="flex items-center gap-1 text-xs text-danger hover:underline pb-2">
-                    <X className="w-3.5 h-3.5" /> Clear filters
+                    <X className="w-3.5 h-3.5" /> {t("table.clearFilters")}
                   </button>
                 )}
               </div>
@@ -180,13 +182,13 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
         <table className="w-full text-sm min-w-[720px]">
           <thead>
             <tr className="text-left text-xs text-ink-muted dark:text-ink-muted-dark border-b border-glass-border-light dark:border-glass-border-dark">
-              <th className="px-4 py-3 font-medium">Title</th>
-              {showDepartmentColumn && <th className="px-4 py-3 font-medium">Department</th>}
-              <th className="px-4 py-3 font-medium">Type</th>
-              <th className="px-4 py-3 font-medium">Amount</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Stage</th>
-              <th className="px-4 py-3 font-medium">Date</th>
+              <th className="px-4 py-3 font-medium">{t("table.title")}</th>
+              {showDepartmentColumn && <th className="px-4 py-3 font-medium">{t("table.department")}</th>}
+              <th className="px-4 py-3 font-medium">{t("table.type")}</th>
+              <th className="px-4 py-3 font-medium">{t("table.amount")}</th>
+              <th className="px-4 py-3 font-medium">{t("table.status")}</th>
+              <th className="px-4 py-3 font-medium">{t("table.stage")}</th>
+              <th className="px-4 py-3 font-medium">{t("table.date")}</th>
             </tr>
           </thead>
           <tbody>
@@ -221,7 +223,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
             ) : (
               <tr>
                 <td colSpan={7} className="px-4 py-10 text-center text-ink-muted dark:text-ink-muted-dark">
-                  No requests match your filters.
+                  {t("table.noMatchFilters")}
                 </td>
               </tr>
             )}
@@ -232,7 +234,7 @@ export default function RequestsTable({ requests = [], loading, onSelect, showDe
       {/* Pagination */}
       <div className="flex items-center justify-between px-4 py-3 border-t border-glass-border-light dark:border-glass-border-dark">
         <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
-          Showing {filtered.length ? (page - 1) * PAGE_SIZE + 1 : 0}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
+          {t("table.showing", { from: filtered.length ? (page - 1) * PAGE_SIZE + 1 : 0, to: Math.min(page * PAGE_SIZE, filtered.length), total: filtered.length })}
         </p>
         <div className="flex items-center gap-1.5">
           <button

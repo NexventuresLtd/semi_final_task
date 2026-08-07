@@ -10,8 +10,8 @@ export default function DafApprovalQueuePage() {
 
   return (
     <>
-      <Helmet><title>{t("requests.dafTitle")} — FERWAFA Approvals</title></Helmet>
-      <h1 className="font-display text-2xl font-semibold mb-1">{t("requests.dafTitle")}</h1>
+      <Helmet><title>{t("approvals.dafTitle")} — FERWAFA Approvals</title></Helmet>
+      <h1 className="font-display text-2xl font-semibold mb-1">{t("approvals.dafTitle")}</h1>
       <p className="text-sm text-ink-muted dark:text-ink-muted-dark mb-6">
         {t("requests.dafSubtitle")}
       </p>

@@ -1,4 +1,5 @@
 import { useAuditTrail } from "../../hooks/useAdmin";
+import { useTranslation } from "react-i18next";
 import GlassCard from "../ui/GlassCard";
 import { FileCheck2, FileX2, UserCog, ShieldOff } from "lucide-react";
 
@@ -6,12 +7,13 @@ const ICONS = { approved: FileCheck2, rejected: FileX2, role_changed: UserCog, u
 
 export default function SystemAuditTrail() {
   const { data: entries, isLoading } = useAuditTrail();
+  const { t } = useTranslation();
 
   return (
     <GlassCard>
-      <h2 className="font-display font-semibold text-ink mb-1">Audit trail</h2>
+      <h2 className="font-display font-semibold text-ink mb-1">{t("admin.auditTrailTitle")}</h2>
       <p className="text-xs text-ink-muted mb-4">
-        A complete, unalterable record of every approval, rejection, and account change.
+        {t("admin.auditTrailDesc")}
       </p>
 
       {isLoading ? (

@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend,
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
@@ -28,6 +29,7 @@ function StatCard({ icon: Icon, label, value, color }) {
 
 export default function AnalyticsDashboardPage() {
   const { data, isLoading } = useAnalyticsOverview();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
@@ -37,48 +39,62 @@ export default function AnalyticsDashboardPage() {
     );
   }
 
-  const statusData = (data?.statusBreakdown || []).map((s) => ({ name: s.status, value: s.count }));
+  const statusData = (data?.statusBreakdown || []).map((s) => ({ 
+    name: s.status, 
+    originalName: s.status,
+    value: s.count 
+  }));
   const deptData = (data?.departmentBreakdown || []).map((d) => ({
     name: DEPARTMENT_CHART_LABEL[d.department] || d.department,
     value: d.count,
   }));
 
+  const statusFormatter = (value) => {
+    const statusMap = {
+      pending: t("analytics.pending"),
+      approved: t("analytics.approved"),
+      rejected: t("analytics.rejected"),
+      submitted: t("analytics.submitted")
+    };
+    return statusMap[value] || value;
+  };
+
   return (
     <>
-      <Helmet><title>Analytics — FERWAFA Approvals</title></Helmet>
+      <Helmet><title>{t("analytics.title")} — FERWAFA Approvals</title></Helmet>
 
-      <h1 className="font-display text-2xl font-semibold text-ink dark:text-ink-dark mb-1">Analytics</h1>
-      <p className="text-sm text-ink-muted dark:text-ink-muted-dark mb-6">Federation-wide request activity and performance.</p>
+      <h1 className="font-display text-2xl font-semibold text-ink dark:text-ink-dark mb-1">{t("analytics.title")}</h1>
+      <p className="text-sm text-ink-muted dark:text-ink-muted-dark mb-6">{t("analytics.subtitle")}</p>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard icon={FileText} label="Total requests" value={data?.totalRequests ?? 0} color="bg-blue-soft text-blue" />
-        <StatCard icon={CheckCircle2} label="Approved" value={data?.totalApproved ?? 0} color="bg-green-soft text-green" />
-        <StatCard icon={XCircle} label="Rejected" value={data?.totalRejected ?? 0} color="bg-danger-soft text-danger" />
-        <StatCard icon={Clock} label="Pending" value={data?.totalPending ?? 0} color="bg-gold-soft text-gold" />
+        <StatCard icon={FileText} label={t("analytics.totalRequests")} value={data?.totalRequests ?? 0} color="bg-blue-soft text-blue" />
+        <StatCard icon={CheckCircle2} label={t("analytics.approved")} value={data?.totalApproved ?? 0} color="bg-green-soft text-green" />
+        <StatCard icon={XCircle} label={t("analytics.rejected")} value={data?.totalRejected ?? 0} color="bg-danger-soft text-danger" />
+        <StatCard icon={Clock} label={t("analytics.pending")} value={data?.totalPending ?? 0} color="bg-gold-soft text-gold" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <GlassCard>
-          <p className="text-sm font-medium text-ink dark:text-ink-dark mb-3">Status breakdown</p>
+          <p className="text-sm font-medium text-ink dark:text-ink-dark mb-3">{t("analytics.statusBreakdown")}</p>
           {statusData.length ? (
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
-                <Pie data={statusData} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={2}>
+                <Pie data={statusData} dataKey="value" nameKey="originalName" innerRadius={55} outerRadius={90} paddingAngle={2}>
                   {statusData.map((entry, i) => (
                     <Cell key={i} fill={STATUS_COLORS[entry.name] || "#8A93A6"} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} formatter={(value, name) => [value, statusFormatter(name)]} />
+                <Legend wrapperStyle={{ fontSize: 12 }} formatter={(value) => statusFormatter(value)} />
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">No data yet.</p>
+            <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">{t("analytics.noDataYet")}</p>
           )}
         </GlassCard>
 
         <GlassCard>
-          <p className="text-sm font-medium text-ink dark:text-ink-dark mb-3">Requests by department</p>
+          <p className="text-sm font-medium text-ink dark:text-ink-dark mb-3">{t("analytics.requestsByDepartment")}</p>
           {deptData.length ? (
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
@@ -92,14 +108,14 @@ export default function AnalyticsDashboardPage() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">No data yet.</p>
+            <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">{t("analytics.noDataYet")}</p>
           )}
         </GlassCard>
       </div>
 
       <GlassCard className="mb-6">
-        <p className="text-sm font-medium text-ink dark:text-ink-dark mb-1">Request volume trend</p>
-        <p className="text-xs text-ink-muted dark:text-ink-muted-dark mb-4">Last 30 days</p>
+        <p className="text-sm font-medium text-ink dark:text-ink-dark mb-1">{t("analytics.requestVolumeTrend")}</p>
+        <p className="text-xs text-ink-muted dark:text-ink-muted-dark mb-4">{t("analytics.last30Days")}</p>
         {data?.volumeTrend?.length ? (
           <ResponsiveContainer width="100%" height={260}>
             <AreaChart data={data.volumeTrend}>
@@ -120,33 +136,34 @@ export default function AnalyticsDashboardPage() {
               <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} vertical={false} />
               <XAxis dataKey="date" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} formatter={(value, name) => [value, statusFormatter(name)]} />
+              <Legend wrapperStyle={{ fontSize: 12 }} formatter={(value) => statusFormatter(value)} />
               <Area type="monotone" dataKey="submitted" stroke="#0F6FA8" fill="url(#submittedFill)" strokeWidth={2} />
               <Area type="monotone" dataKey="approved" stroke="#1A7A4C" fill="url(#approvedFill)" strokeWidth={2} />
               <Area type="monotone" dataKey="rejected" stroke="#C1454C" fill="url(#rejectedFill)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">No activity in the last 30 days.</p>
+          <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">{t("analytics.noActivityLast30Days")}</p>
         )}
       </GlassCard>
 
       <GlassCard>
-        <p className="text-sm font-medium text-ink dark:text-ink-dark mb-1">Average approval turnaround</p>
-        <p className="text-xs text-ink-muted dark:text-ink-muted-dark mb-4">Hours from submission to final decision, by department</p>
+        <p className="text-sm font-medium text-ink dark:text-ink-dark mb-1">{t("analytics.avgApprovalTurnaround")}</p>
+        <p className="text-xs text-ink-muted dark:text-ink-muted-dark mb-4">{t("analytics.avgTurnaroundSubtitle")}</p>
         {data?.turnaroundByDepartment?.length ? (
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={data.turnaroundByDepartment.map((t) => ({ ...t, name: DEPARTMENT_CHART_LABEL[t.department] || t.department }))}>
               <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "hrs", angle: -90, position: "insideLeft", fontSize: 11 }} />
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} formatter={(v) => [`${v} hrs`, "Avg turnaround"]} />
+              <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: t("analytics.hrs"), angle: -90, position: "insideLeft", fontSize: 11 }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} formatter={(v) => [`${v} ${t("analytics.hrs")}`, t("analytics.avgTurnaround")]} />
+              <Legend wrapperStyle={{ fontSize: 12 }} formatter={(value) => statusFormatter(value)} />
               <Bar dataKey="avgHours" fill="#0F6FA8" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">No completed requests yet.</p>
+          <p className="text-sm text-ink-muted dark:text-ink-muted-dark text-center py-16">{t("analytics.noCompletedRequestsYet")}</p>
         )}
       </GlassCard>
     </>

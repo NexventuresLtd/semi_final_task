@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ClipboardList, Users, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import StatsBentoGrid from "../../components/dashboard/StatsBentoGrid";
-import ApprovalTrendChart from "../../components/dashboard/ApprovalTrendChart";
+import DepartmentRequestsBarChart from "../../components/dashboard/DepartmentRequestsBarChart";
 import Button from "../../components/ui/Button";
 import GlassCard from "../../components/ui/GlassCard";
 import { useDashboardStats } from "../../hooks/useRequests";
@@ -58,7 +58,7 @@ export default function SgDashboard() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <ApprovalTrendChart />
+          <DepartmentRequestsBarChart />
         </div>
         <GlassCard className="flex flex-col justify-between">
           <div>

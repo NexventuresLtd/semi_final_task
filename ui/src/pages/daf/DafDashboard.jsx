@@ -4,7 +4,7 @@ import { ClipboardList } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import StatsBentoGrid from "../../components/dashboard/StatsBentoGrid";
 import RecentActivityFeed from "../../components/dashboard/RecentActivityFeed";
-import ApprovalTrendChart from "../../components/dashboard/ApprovalTrendChart";
+import DepartmentRequestsBarChart from "../../components/dashboard/DepartmentRequestsBarChart";
 import Button from "../../components/ui/Button";
 import { useDashboardStats } from "../../hooks/useRequests";
 import { useAuthStore } from "../../store/authStore";
@@ -51,7 +51,7 @@ export default function DafDashboard() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <ApprovalTrendChart />
+          <DepartmentRequestsBarChart />
         </div>
         <RecentActivityFeed />
       </div>

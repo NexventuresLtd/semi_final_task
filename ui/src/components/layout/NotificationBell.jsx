@@ -43,7 +43,8 @@ export default function NotificationBell() {
 
     if (notif.type === "new_request") {
       // DAF/SG land on their approval queue, filtered to "New"
-      navigate(`/${role}/approvals`, { state: { filter: "new", openRequestId: notif.requestId } });
+      const targetPath = role === "daf" ? "/daf/approvals" : "/sg/approvals";
+      navigate(targetPath, { state: { filter: "new", openRequestId: notif.requestId } });
     } else {
       // Requester (staff) lands on their own request list
       navigate("/staff/my-requests", { state: { openRequestId: notif.requestId } });
@@ -114,7 +115,8 @@ export default function NotificationBell() {
               <button
                 onClick={() => {
                   setOpen(false);
-                  navigate(role === "staff" ? "/staff/my-requests" : `/${role}/approvals`, { state: { filter: "new" } });
+                  const targetPath = role === "staff" ? "/staff/my-requests" : (role === "daf" ? "/daf/approvals" : "/sg/approvals");
+                  navigate(targetPath, { state: { filter: "new" } });
                 }}
                 className="w-full py-2.5 text-xs font-medium text-blue hover:bg-blue-soft transition-colors border-t border-glass-border-light dark:border-glass-border-dark"
               >
